@@ -1,2 +1,2 @@
 # pilea-web
-Plant care information system.
+THE BEST Plant care information system.
