@@ -17,8 +17,7 @@ namespace web.Data
         public DbSet<Location> Locations { get; set; }
         public DbSet<Plant> Plants { get; set; }
         public DbSet<Category> Types { get; set; }
-        public DbSet<LocalUser> LocalUser { get; set; }
-        public DbSet<Waters> Waters { get; set; }
+        // public DbSet<LocalUser> LocalUser { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,8 +30,7 @@ namespace web.Data
             modelBuilder.Entity<Location>().ToTable("Location");
             modelBuilder.Entity<Plant>().ToTable("Plant");
             modelBuilder.Entity<Category>().ToTable("Type");
-            modelBuilder.Entity<LocalUser>().ToTable("LocalUser");
-            modelBuilder.Entity<Waters>().ToTable("Waters");
+
         }
     }
 }

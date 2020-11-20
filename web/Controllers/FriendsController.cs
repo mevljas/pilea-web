@@ -8,25 +8,29 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
-    // Require login for everything
     [Authorize]
     public class FriendsController : Controller
     {
         private readonly PileaContext _context;
 
-        public FriendsController(PileaContext context)
+         // Object for fetching user info.
+        private readonly UserManager<ApplicationUser> _usermanager;
+
+
+        public FriendsController(PileaContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
+            _usermanager = userManager;
         }
 
         // GET: Friends
         public async Task<IActionResult> Index()
         {
-            var pileaContext = _context.Friends.Include(f => f.LocalUser);
-            return View(await pileaContext.ToListAsync());
+            return View(await _context.Friends.ToListAsync());
         }
 
         // GET: Friends/Details/5
@@ -38,7 +42,6 @@ namespace web.Controllers
             }
 
             var friend = await _context.Friends
-                .Include(f => f.LocalUser)
                 .FirstOrDefaultAsync(m => m.FriendID == id);
             if (friend == null)
             {
@@ -51,7 +54,6 @@ namespace web.Controllers
         // GET: Friends/Create
         public IActionResult Create()
         {
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID");
             return View();
         }
 
@@ -60,15 +62,17 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FriendID,LocalUserID")] Friend friend)
+        public async Task<IActionResult> Create([Bind("FriendID")] Friend friend)
         {
+            // Get ApplicationUser object (plant owner)
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (ModelState.IsValid)
             {
+                friend.User = currentUser;
                 _context.Add(friend);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", friend.LocalUserID);
             return View(friend);
         }
 
@@ -85,7 +89,6 @@ namespace web.Controllers
             {
                 return NotFound();
             }
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", friend.LocalUserID);
             return View(friend);
         }
 
@@ -94,7 +97,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FriendID,LocalUserID")] Friend friend)
+        public async Task<IActionResult> Edit(int id, [Bind("FriendID")] Friend friend)
         {
             if (id != friend.FriendID)
             {
@@ -121,7 +124,6 @@ namespace web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", friend.LocalUserID);
             return View(friend);
         }
 
@@ -134,7 +136,6 @@ namespace web.Controllers
             }
 
             var friend = await _context.Friends
-                .Include(f => f.LocalUser)
                 .FirstOrDefaultAsync(m => m.FriendID == id);
             if (friend == null)
             {

@@ -10,7 +10,6 @@ using web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 
-
 namespace web.Controllers
 {
     // Require login for everything
@@ -22,16 +21,16 @@ namespace web.Controllers
         // Object for fetching user info.
         private readonly UserManager<ApplicationUser> _usermanager;
 
-        public PlantsController(PileaContext context, UserManager<ApplicationUser> usermanager)
+        public PlantsController(PileaContext context, UserManager<ApplicationUser> userManager)
         {
             _context = context;
-            _usermanager = usermanager;
+            _usermanager = userManager;
         }
 
         // GET: Plants
         public async Task<IActionResult> Index()
         {
-            var pileaContext = _context.Plants.Include(p => p.Category).Include(p => p.LocalUser);
+            var pileaContext = _context.Plants.Include(p => p.Category);
             return View(await pileaContext.ToListAsync());
         }
 
@@ -45,7 +44,6 @@ namespace web.Controllers
 
             var plant = await _context.Plants
                 .Include(p => p.Category)
-                .Include(p => p.LocalUser)
                 .FirstOrDefaultAsync(m => m.PlantID == id);
             if (plant == null)
             {
@@ -59,7 +57,6 @@ namespace web.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID");
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID");
             return View();
         }
 
@@ -68,7 +65,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWatered,LocalUserID,CategoryID")] Plant plant)
+        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID")] Plant plant)
         {
             // Get ApplicationUser object (plant owner)
             var currentUser = await _usermanager.GetUserAsync(User);
@@ -80,7 +77,6 @@ namespace web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", plant.LocalUserID);
             return View(plant);
         }
 
@@ -98,7 +94,6 @@ namespace web.Controllers
                 return NotFound();
             }
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", plant.LocalUserID);
             return View(plant);
         }
 
@@ -107,7 +102,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWatered,LocalUserID,CategoryID")] Plant plant)
+        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID")] Plant plant)
         {
             if (id != plant.PlantID)
             {
@@ -135,7 +130,6 @@ namespace web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", plant.LocalUserID);
             return View(plant);
         }
 
@@ -149,7 +143,6 @@ namespace web.Controllers
 
             var plant = await _context.Plants
                 .Include(p => p.Category)
-                .Include(p => p.LocalUser)
                 .FirstOrDefaultAsync(m => m.PlantID == id);
             if (plant == null)
             {

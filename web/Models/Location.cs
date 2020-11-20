@@ -10,11 +10,7 @@ namespace web.Models
         public string Name { get; set; }
 
         public string? Description { get; set; }
-        public ICollection<Plant>? Plants { get; set; }
-
-        public LocalUser LocalUser { get; set; }
-
-        public int LocalUserID { get; set; }
+        public ICollection<Plant> Plants { get; set; }
 
         public ApplicationUser User { get; set; }
 

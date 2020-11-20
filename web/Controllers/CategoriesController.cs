@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
@@ -27,8 +28,6 @@ namespace web.Controllers
         }
 
         // GET: Categories/Details/5
-        // Require login 
-        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -47,7 +46,7 @@ namespace web.Controllers
         }
 
         // GET: Categories/Create
-         // Require login 
+
         [Authorize]
         public IActionResult Create()
         {
@@ -71,8 +70,6 @@ namespace web.Controllers
         }
 
         // GET: Categories/Edit/5
-
-         // Require login 
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -94,7 +91,6 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-         // Require login 
         [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryID,PlantCategory")] Category category)
         {
@@ -127,7 +123,6 @@ namespace web.Controllers
         }
 
         // GET: Categories/Delete/5
-         // Require login 
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -147,10 +142,9 @@ namespace web.Controllers
         }
 
         // POST: Categories/Delete/5
-         // Require login 
-        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Types.FindAsync(id);

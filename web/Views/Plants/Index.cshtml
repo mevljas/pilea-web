@@ -28,10 +28,10 @@
                 @Html.DisplayNameFor(model => model.DaysBetweenWatering)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LastWatered)
+                @Html.DisplayNameFor(model => model.LastWateredDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LocalUser)
+                @Html.DisplayNameFor(model => model.NextWateredDate)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Category)
@@ -58,10 +58,10 @@
                 @Html.DisplayFor(modelItem => item.DaysBetweenWatering)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LastWatered)
+                @Html.DisplayFor(modelItem => item.LastWateredDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.LocalUser.LocalUserID)
+                @Html.DisplayFor(modelItem => item.NextWateredDate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Category.CategoryID)

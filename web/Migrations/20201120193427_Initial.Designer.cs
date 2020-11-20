@@ -10,8 +10,8 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(PileaContext))]
-    [Migration("20201120172833_Start")]
-    partial class Start
+    [Migration("20201120193427_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -237,8 +237,8 @@ namespace web.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("PlantCategory")
-                        .HasColumnType("int");
+                    b.Property<string>("PlantCategory")
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("CategoryID");
 
@@ -252,40 +252,14 @@ namespace web.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("LocalUserID")
-                        .HasColumnType("int");
-
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("FriendID");
 
-                    b.HasIndex("LocalUserID");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Friend");
-                });
-
-            modelBuilder.Entity("web.Models.LocalUser", b =>
-                {
-                    b.Property<int>("LocalUserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Nickname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("LocalUserID");
-
-                    b.ToTable("LocalUser");
                 });
 
             modelBuilder.Entity("web.Models.Location", b =>
@@ -298,9 +272,6 @@ namespace web.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LocalUserID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
@@ -308,8 +279,6 @@ namespace web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("LocationID");
-
-                    b.HasIndex("LocalUserID");
 
                     b.HasIndex("UserId");
 
@@ -332,17 +301,17 @@ namespace web.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("LastWatered")
+                    b.Property<DateTime>("LastWateredDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int>("LocalUserID")
-                        .HasColumnType("int");
 
                     b.Property<int?>("LocationID")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("NextWateredDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
@@ -357,25 +326,11 @@ namespace web.Migrations
 
                     b.HasIndex("CategoryID");
 
-                    b.HasIndex("LocalUserID");
-
                     b.HasIndex("LocationID");
 
                     b.HasIndex("UserId");
 
                     b.ToTable("Plant");
-                });
-
-            modelBuilder.Entity("web.Models.Waters", b =>
-                {
-                    b.Property<int>("WatersID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.HasKey("WatersID");
-
-                    b.ToTable("Waters");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -431,12 +386,6 @@ namespace web.Migrations
 
             modelBuilder.Entity("web.Models.Friend", b =>
                 {
-                    b.HasOne("web.Models.LocalUser", "LocalUser")
-                        .WithMany("Friends")
-                        .HasForeignKey("LocalUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("web.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -444,12 +393,6 @@ namespace web.Migrations
 
             modelBuilder.Entity("web.Models.Location", b =>
                 {
-                    b.HasOne("web.Models.LocalUser", "LocalUser")
-                        .WithMany("Locations")
-                        .HasForeignKey("LocalUserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("web.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
@@ -460,12 +403,6 @@ namespace web.Migrations
                     b.HasOne("web.Models.Category", "Category")
                         .WithMany("Plants")
                         .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("web.Models.LocalUser", "LocalUser")
-                        .WithMany("Plants")
-                        .HasForeignKey("LocalUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
