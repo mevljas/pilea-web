@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers
 {
@@ -26,6 +27,8 @@ namespace web.Controllers
         }
 
         // GET: Categories/Details/5
+        // Require login 
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,6 +47,8 @@ namespace web.Controllers
         }
 
         // GET: Categories/Create
+         // Require login 
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -66,6 +71,9 @@ namespace web.Controllers
         }
 
         // GET: Categories/Edit/5
+
+         // Require login 
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -86,6 +94,8 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+         // Require login 
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryID,PlantCategory")] Category category)
         {
             if (id != category.CategoryID)
@@ -117,6 +127,8 @@ namespace web.Controllers
         }
 
         // GET: Categories/Delete/5
+         // Require login 
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,6 +147,8 @@ namespace web.Controllers
         }
 
         // POST: Categories/Delete/5
+         // Require login 
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

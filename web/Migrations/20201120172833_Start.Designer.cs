@@ -10,8 +10,8 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(PileaContext))]
-    [Migration("20201120160833_ApplicationUser")]
-    partial class ApplicationUser
+    [Migration("20201120172833_Start")]
+    partial class Start
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -99,10 +99,12 @@ namespace web.Migrations
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderKey")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ProviderDisplayName")
                         .HasColumnType("nvarchar(max)");
@@ -139,10 +141,12 @@ namespace web.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoginProvider")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("Value")
                         .HasColumnType("nvarchar(max)");
@@ -251,9 +255,14 @@ namespace web.Migrations
                     b.Property<int>("LocalUserID")
                         .HasColumnType("int");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("FriendID");
 
                     b.HasIndex("LocalUserID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Friend");
                 });
@@ -295,9 +304,14 @@ namespace web.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.HasKey("LocationID");
 
                     b.HasIndex("LocalUserID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Location");
                 });
@@ -333,6 +347,9 @@ namespace web.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<byte[]>("image")
                         .HasColumnType("varbinary(max)");
 
@@ -343,6 +360,8 @@ namespace web.Migrations
                     b.HasIndex("LocalUserID");
 
                     b.HasIndex("LocationID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Plant");
                 });
@@ -417,6 +436,10 @@ namespace web.Migrations
                         .HasForeignKey("LocalUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("web.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("web.Models.Location", b =>
@@ -426,6 +449,10 @@ namespace web.Migrations
                         .HasForeignKey("LocalUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("web.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("web.Models.Plant", b =>
@@ -445,6 +472,10 @@ namespace web.Migrations
                     b.HasOne("web.Models.Location", null)
                         .WithMany("Plants")
                         .HasForeignKey("LocationID");
+
+                    b.HasOne("web.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 #pragma warning restore 612, 618
         }

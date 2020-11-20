@@ -16,6 +16,8 @@ namespace web.Models
 
         public int LocalUserID { get; set; }
 
+        public ApplicationUser User { get; set; }
+
 
 
 

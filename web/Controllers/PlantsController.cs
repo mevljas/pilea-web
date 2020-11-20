@@ -7,16 +7,25 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+
 
 namespace web.Controllers
 {
+    // Require login for everything
+    [Authorize]
     public class PlantsController : Controller
     {
         private readonly PileaContext _context;
 
-        public PlantsController(PileaContext context)
+        // Object for fetching user info.
+        private readonly UserManager<ApplicationUser> _usermanager;
+
+        public PlantsController(PileaContext context, UserManager<ApplicationUser> usermanager)
         {
             _context = context;
+            _usermanager = usermanager;
         }
 
         // GET: Plants
@@ -61,8 +70,11 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWatered,LocalUserID,CategoryID")] Plant plant)
         {
+            // Get ApplicationUser object (plant owner)
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (ModelState.IsValid)
             {
+                plant.User = currentUser;
                 _context.Add(plant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));

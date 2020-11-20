@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 
+
 namespace web.Models
 {
     public class Plant
@@ -17,6 +18,8 @@ namespace web.Models
         public Category Category { get; set; }
         public int CategoryID { get; set; }
         // public ICollection<Waters> Waters { get; set; }
+
+        public ApplicationUser User { get; set; }
 
     }
 }
