@@ -24,7 +24,7 @@ namespace web.Controllers
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Types.ToListAsync());
+            return View(await _context.Categories.ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -35,8 +35,11 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Types
-                .FirstOrDefaultAsync(m => m.CategoryID == id);
+            var category = await _context.Categories
+                .Include(p => p.Plants)
+                .AsNoTracking()
+                .FirstOrDefaultAsync(c => c.CategoryID == id);
+
             if (category == null)
             {
                 return NotFound();
@@ -78,7 +81,7 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Types.FindAsync(id);
+            var category = await _context.Categories.FindAsync(id);
             if (category == null)
             {
                 return NotFound();
@@ -131,7 +134,7 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var category = await _context.Types
+            var category = await _context.Categories
                 .FirstOrDefaultAsync(m => m.CategoryID == id);
             if (category == null)
             {
@@ -147,15 +150,15 @@ namespace web.Controllers
         [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var category = await _context.Types.FindAsync(id);
-            _context.Types.Remove(category);
+            var category = await _context.Categories.FindAsync(id);
+            _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CategoryExists(int id)
         {
-            return _context.Types.Any(e => e.CategoryID == id);
+            return _context.Categories.Any(e => e.CategoryID == id);
         }
     }
 }
