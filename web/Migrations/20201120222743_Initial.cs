@@ -222,8 +222,8 @@ namespace web.Migrations
                     LastWateredDate = table.Column<DateTime>(nullable: false),
                     NextWateredDate = table.Column<DateTime>(nullable: false),
                     CategoryID = table.Column<int>(nullable: false),
-                    UserId = table.Column<string>(nullable: true),
-                    LocationID = table.Column<int>(nullable: true)
+                    LocationID = table.Column<int>(nullable: false),
+                    UserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -239,7 +239,7 @@ namespace web.Migrations
                         column: x => x.LocationID,
                         principalTable: "Location",
                         principalColumn: "LocationID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Plant_AspNetUsers_UserId",
                         column: x => x.UserId,

@@ -40,8 +40,12 @@ namespace web.Controllers
                 return NotFound();
             }
 
+
             var location = await _context.Locations
+                .Include(s => s.Plants)
+                .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.LocationID == id);
+                
             if (location == null)
             {
                 return NotFound();

@@ -17,10 +17,16 @@ namespace web.Models
         public DateTime NextWateredDate { get; set; }
 
         public Category? Category { get; set; }
+
         public int CategoryID { get; set; }
-        // public ICollection<Waters> Waters { get; set; }
+
+        public Location? Location { get; set; }
+        public int LocationID { get; set; }
+        
 
         public ApplicationUser User { get; set; }
+
+        
 
     }
 }

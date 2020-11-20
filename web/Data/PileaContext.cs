@@ -16,7 +16,7 @@ namespace web.Data
         public DbSet<Friend> Friends { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<Plant> Plants { get; set; }
-        public DbSet<Category> Types { get; set; }
+        public DbSet<Category> Categories { get; set; }
         // public DbSet<LocalUser> LocalUser { get; set; }
 
 

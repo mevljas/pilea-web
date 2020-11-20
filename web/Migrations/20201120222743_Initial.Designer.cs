@@ -10,7 +10,7 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(PileaContext))]
-    [Migration("20201120193427_Initial")]
+    [Migration("20201120222743_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -304,7 +304,7 @@ namespace web.Migrations
                     b.Property<DateTime>("LastWateredDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LocationID")
+                    b.Property<int>("LocationID")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -406,9 +406,11 @@ namespace web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("web.Models.Location", null)
+                    b.HasOne("web.Models.Location", "Location")
                         .WithMany("Plants")
-                        .HasForeignKey("LocationID");
+                        .HasForeignKey("LocationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("web.Models.ApplicationUser", "User")
                         .WithMany()

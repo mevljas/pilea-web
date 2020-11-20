@@ -302,7 +302,7 @@ namespace web.Migrations
                     b.Property<DateTime>("LastWateredDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("LocationID")
+                    b.Property<int>("LocationID")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -404,9 +404,11 @@ namespace web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("web.Models.Location", null)
+                    b.HasOne("web.Models.Location", "Location")
                         .WithMany("Plants")
-                        .HasForeignKey("LocationID");
+                        .HasForeignKey("LocationID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("web.Models.ApplicationUser", "User")
                         .WithMany()
