@@ -1,12 +1,13 @@
 using web.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace web.Data
 {
 
     // The main class that coordinates Entity Framework functionality for a given data model 
     // is the database context class.
-    public class PileaContext : DbContext
+    public class PileaContext : IdentityDbContext<ApplicationUser>
     {
         public PileaContext(DbContextOptions<PileaContext> options) : base(options)
         {
@@ -22,6 +23,8 @@ namespace web.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            base.OnModelCreating(modelBuilder); 
 
             // Override and change database table names (singularity)
             modelBuilder.Entity<Friend>().ToTable("Friend");
