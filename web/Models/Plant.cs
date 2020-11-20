@@ -12,8 +12,8 @@ namespace web.Models
         public byte[]? image { get; set; }
         public int DaysBetweenWatering { get; set; }
         public DateTime LastWatered { get; set; }
-        public User User { get; set; }
-        public int UserID { get; set; }
+        public LocalUser LocalUser { get; set; }
+        public int LocalUserID { get; set; }
         public Category Category { get; set; }
         public int CategoryID { get; set; }
         // public ICollection<Waters> Waters { get; set; }

@@ -8,6 +8,21 @@ namespace web.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "LocalUser",
+                columns: table => new
+                {
+                    LocalUserID = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(nullable: true),
+                    Nickname = table.Column<string>(nullable: true),
+                    Password = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LocalUser", x => x.LocalUserID);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Type",
                 columns: table => new
                 {
@@ -18,21 +33,6 @@ namespace web.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Type", x => x.CategoryID);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "User",
-                columns: table => new
-                {
-                    UserID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(nullable: true),
-                    Nickname = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_User", x => x.UserID);
                 });
 
             migrationBuilder.CreateTable(
@@ -53,16 +53,16 @@ namespace web.Migrations
                 {
                     FriendID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserID = table.Column<int>(nullable: false)
+                    LocalUserID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Friend", x => x.FriendID);
                     table.ForeignKey(
-                        name: "FK_Friend_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
+                        name: "FK_Friend_LocalUser_LocalUserID",
+                        column: x => x.LocalUserID,
+                        principalTable: "LocalUser",
+                        principalColumn: "LocalUserID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -74,16 +74,16 @@ namespace web.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(nullable: true),
                     Description = table.Column<string>(nullable: true),
-                    UserID = table.Column<int>(nullable: false)
+                    LocalUserID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Location", x => x.LocationID);
                     table.ForeignKey(
-                        name: "FK_Location_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
+                        name: "FK_Location_LocalUser_LocalUserID",
+                        column: x => x.LocalUserID,
+                        principalTable: "LocalUser",
+                        principalColumn: "LocalUserID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -99,7 +99,7 @@ namespace web.Migrations
                     image = table.Column<byte[]>(nullable: true),
                     DaysBetweenWatering = table.Column<int>(nullable: false),
                     LastWatered = table.Column<DateTime>(nullable: false),
-                    UserID = table.Column<int>(nullable: false),
+                    LocalUserID = table.Column<int>(nullable: false),
                     CategoryID = table.Column<int>(nullable: false),
                     LocationID = table.Column<int>(nullable: true)
                 },
@@ -113,28 +113,28 @@ namespace web.Migrations
                         principalColumn: "CategoryID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
+                        name: "FK_Plant_LocalUser_LocalUserID",
+                        column: x => x.LocalUserID,
+                        principalTable: "LocalUser",
+                        principalColumn: "LocalUserID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Plant_Location_LocationID",
                         column: x => x.LocationID,
                         principalTable: "Location",
                         principalColumn: "LocationID",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Plant_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friend_UserID",
+                name: "IX_Friend_LocalUserID",
                 table: "Friend",
-                column: "UserID");
+                column: "LocalUserID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Location_UserID",
+                name: "IX_Location_LocalUserID",
                 table: "Location",
-                column: "UserID");
+                column: "LocalUserID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Plant_CategoryID",
@@ -142,14 +142,14 @@ namespace web.Migrations
                 column: "CategoryID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Plant_LocalUserID",
+                table: "Plant",
+                column: "LocalUserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Plant_LocationID",
                 table: "Plant",
                 column: "LocationID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Plant_UserID",
-                table: "Plant",
-                column: "UserID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -170,7 +170,7 @@ namespace web.Migrations
                 name: "Location");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "LocalUser");
         }
     }
 }

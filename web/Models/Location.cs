@@ -12,9 +12,9 @@ namespace web.Models
         public string? Description { get; set; }
         public ICollection<Plant>? Plants { get; set; }
 
-        public User User { get; set; }
+        public LocalUser LocalUser { get; set; }
 
-        public int UserID { get; set; }
+        public int LocalUserID { get; set; }
 
 
 

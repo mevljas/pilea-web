@@ -22,7 +22,7 @@ namespace web.Controllers
         // GET: Locations
         public async Task<IActionResult> Index()
         {
-            var pileaContext = _context.Locations.Include(l => l.User);
+            var pileaContext = _context.Locations.Include(l => l.LocalUser);
             return View(await pileaContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace web.Controllers
             }
 
             var location = await _context.Locations
-                .Include(l => l.User)
+                .Include(l => l.LocalUser)
                 .FirstOrDefaultAsync(m => m.LocationID == id);
             if (location == null)
             {
@@ -48,7 +48,7 @@ namespace web.Controllers
         // GET: Locations/Create
         public IActionResult Create()
         {
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID");
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LocationID,Name,Description,UserID")] Location location)
+        public async Task<IActionResult> Create([Bind("LocationID,Name,Description,LocalUserID")] Location location)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", location.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", location.LocalUserID);
             return View(location);
         }
 
@@ -82,7 +82,7 @@ namespace web.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", location.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", location.LocalUserID);
             return View(location);
         }
 
@@ -91,7 +91,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LocationID,Name,Description,UserID")] Location location)
+        public async Task<IActionResult> Edit(int id, [Bind("LocationID,Name,Description,LocalUserID")] Location location)
         {
             if (id != location.LocationID)
             {
@@ -118,7 +118,7 @@ namespace web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", location.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", location.LocalUserID);
             return View(location);
         }
 
@@ -131,7 +131,7 @@ namespace web.Controllers
             }
 
             var location = await _context.Locations
-                .Include(l => l.User)
+                .Include(l => l.LocalUser)
                 .FirstOrDefaultAsync(m => m.LocationID == id);
             if (location == null)
             {

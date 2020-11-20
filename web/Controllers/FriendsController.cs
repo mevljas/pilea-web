@@ -22,7 +22,7 @@ namespace web.Controllers
         // GET: Friends
         public async Task<IActionResult> Index()
         {
-            var pileaContext = _context.Friends.Include(f => f.User);
+            var pileaContext = _context.Friends.Include(f => f.LocalUser);
             return View(await pileaContext.ToListAsync());
         }
 
@@ -35,7 +35,7 @@ namespace web.Controllers
             }
 
             var friend = await _context.Friends
-                .Include(f => f.User)
+                .Include(f => f.LocalUser)
                 .FirstOrDefaultAsync(m => m.FriendID == id);
             if (friend == null)
             {
@@ -48,7 +48,7 @@ namespace web.Controllers
         // GET: Friends/Create
         public IActionResult Create()
         {
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID");
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID");
             return View();
         }
 
@@ -57,7 +57,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FriendID,UserID")] Friend friend)
+        public async Task<IActionResult> Create([Bind("FriendID,LocalUserID")] Friend friend)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +65,7 @@ namespace web.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", friend.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", friend.LocalUserID);
             return View(friend);
         }
 
@@ -82,7 +82,7 @@ namespace web.Controllers
             {
                 return NotFound();
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", friend.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", friend.LocalUserID);
             return View(friend);
         }
 
@@ -91,7 +91,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("FriendID,UserID")] Friend friend)
+        public async Task<IActionResult> Edit(int id, [Bind("FriendID,LocalUserID")] Friend friend)
         {
             if (id != friend.FriendID)
             {
@@ -118,7 +118,7 @@ namespace web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", friend.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", friend.LocalUserID);
             return View(friend);
         }
 
@@ -131,7 +131,7 @@ namespace web.Controllers
             }
 
             var friend = await _context.Friends
-                .Include(f => f.User)
+                .Include(f => f.LocalUser)
                 .FirstOrDefaultAsync(m => m.FriendID == id);
             if (friend == null)
             {

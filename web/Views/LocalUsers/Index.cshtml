@@ -1,4 +1,4 @@
-@model IEnumerable<web.Models.User>
+@model IEnumerable<web.Models.LocalUser>
 
 @{
     ViewData["Title"] = "Index";
@@ -37,9 +37,9 @@
                 @Html.DisplayFor(modelItem => item.Password)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.UserID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.UserID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.UserID">Delete</a>
+                <a asp-action="Edit" asp-route-id="@item.LocalUserID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.LocalUserID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.LocalUserID">Delete</a>
             </td>
         </tr>
 }

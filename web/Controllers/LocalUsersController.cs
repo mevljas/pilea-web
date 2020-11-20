@@ -10,22 +10,22 @@ using web.Models;
 
 namespace web.Controllers
 {
-    public class UsersController : Controller
+    public class LocalUsersController : Controller
     {
         private readonly PileaContext _context;
 
-        public UsersController(PileaContext context)
+        public LocalUsersController(PileaContext context)
         {
             _context = context;
         }
 
-        // GET: Users
+        // GET: LocalUsers
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Users.ToListAsync());
+            return View(await _context.LocalUser.ToListAsync());
         }
 
-        // GET: Users/Details/5
+        // GET: LocalUsers/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var localUser = await _context.LocalUser
+                .FirstOrDefaultAsync(m => m.LocalUserID == id);
+            if (localUser == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(localUser);
         }
 
-        // GET: Users/Create
+        // GET: LocalUsers/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Users/Create
+        // POST: LocalUsers/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserID,Username,Nickname,Password")] User user)
+        public async Task<IActionResult> Create([Bind("LocalUserID,Username,Nickname,Password")] LocalUser localUser)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(user);
+                _context.Add(localUser);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(localUser);
         }
 
-        // GET: Users/Edit/5
+        // GET: LocalUsers/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var localUser = await _context.LocalUser.FindAsync(id);
+            if (localUser == null)
             {
                 return NotFound();
             }
-            return View(user);
+            return View(localUser);
         }
 
-        // POST: Users/Edit/5
+        // POST: LocalUsers/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for 
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserID,Username,Nickname,Password")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("LocalUserID,Username,Nickname,Password")] LocalUser localUser)
         {
-            if (id != user.UserID)
+            if (id != localUser.LocalUserID)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace web.Controllers
             {
                 try
                 {
-                    _context.Update(user);
+                    _context.Update(localUser);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!UserExists(user.UserID))
+                    if (!LocalUserExists(localUser.LocalUserID))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(user);
+            return View(localUser);
         }
 
-        // GET: Users/Delete/5
+        // GET: LocalUsers/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace web.Controllers
                 return NotFound();
             }
 
-            var user = await _context.Users
-                .FirstOrDefaultAsync(m => m.UserID == id);
-            if (user == null)
+            var localUser = await _context.LocalUser
+                .FirstOrDefaultAsync(m => m.LocalUserID == id);
+            if (localUser == null)
             {
                 return NotFound();
             }
 
-            return View(user);
+            return View(localUser);
         }
 
-        // POST: Users/Delete/5
+        // POST: LocalUsers/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var user = await _context.Users.FindAsync(id);
-            _context.Users.Remove(user);
+            var localUser = await _context.LocalUser.FindAsync(id);
+            _context.LocalUser.Remove(localUser);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool UserExists(int id)
+        private bool LocalUserExists(int id)
         {
-            return _context.Users.Any(e => e.UserID == id);
+            return _context.LocalUser.Any(e => e.LocalUserID == id);
         }
     }
 }

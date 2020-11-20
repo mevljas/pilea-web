@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace web.Models
 {
-    public class User
+    public class LocalUser
     {
-        public int UserID { get; set; }
+        public int LocalUserID { get; set; }
         public string Username { get; set; }
         public string Nickname { get; set; }
         public string Password { get; set; }

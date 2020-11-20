@@ -10,7 +10,7 @@ using web.Data;
 namespace web.Migrations
 {
     [DbContext(typeof(PileaContext))]
-    [Migration("20201119214230_Initial")]
+    [Migration("20201120144039_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -43,14 +43,35 @@ namespace web.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("UserID")
+                    b.Property<int>("LocalUserID")
                         .HasColumnType("int");
 
                     b.HasKey("FriendID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("LocalUserID");
 
                     b.ToTable("Friend");
+                });
+
+            modelBuilder.Entity("web.Models.LocalUser", b =>
+                {
+                    b.Property<int>("LocalUserID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Nickname")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Password")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("LocalUserID");
+
+                    b.ToTable("LocalUser");
                 });
 
             modelBuilder.Entity("web.Models.Location", b =>
@@ -63,15 +84,15 @@ namespace web.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("LocalUserID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
                     b.HasKey("LocationID");
 
-                    b.HasIndex("UserID");
+                    b.HasIndex("LocalUserID");
 
                     b.ToTable("Location");
                 });
@@ -95,6 +116,9 @@ namespace web.Migrations
                     b.Property<DateTime>("LastWatered")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("LocalUserID")
+                        .HasColumnType("int");
+
                     b.Property<int?>("LocationID")
                         .HasColumnType("int");
 
@@ -104,9 +128,6 @@ namespace web.Migrations
                     b.Property<string>("Note")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
                     b.Property<byte[]>("image")
                         .HasColumnType("varbinary(max)");
 
@@ -114,32 +135,11 @@ namespace web.Migrations
 
                     b.HasIndex("CategoryID");
 
+                    b.HasIndex("LocalUserID");
+
                     b.HasIndex("LocationID");
 
-                    b.HasIndex("UserID");
-
                     b.ToTable("Plant");
-                });
-
-            modelBuilder.Entity("web.Models.User", b =>
-                {
-                    b.Property<int>("UserID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Nickname")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Password")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Username")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("UserID");
-
-                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("web.Models.Waters", b =>
@@ -156,18 +156,18 @@ namespace web.Migrations
 
             modelBuilder.Entity("web.Models.Friend", b =>
                 {
-                    b.HasOne("web.Models.User", "User")
+                    b.HasOne("web.Models.LocalUser", "LocalUser")
                         .WithMany("Friends")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("LocalUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
             modelBuilder.Entity("web.Models.Location", b =>
                 {
-                    b.HasOne("web.Models.User", "User")
+                    b.HasOne("web.Models.LocalUser", "LocalUser")
                         .WithMany("Locations")
-                        .HasForeignKey("UserID")
+                        .HasForeignKey("LocalUserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -180,15 +180,15 @@ namespace web.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("web.Models.LocalUser", "LocalUser")
+                        .WithMany("Plants")
+                        .HasForeignKey("LocalUserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("web.Models.Location", null)
                         .WithMany("Plants")
                         .HasForeignKey("LocationID");
-
-                    b.HasOne("web.Models.User", "User")
-                        .WithMany("Plants")
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

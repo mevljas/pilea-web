@@ -6,10 +6,10 @@ namespace web.Models
     public class Friend
     {
         public int FriendID { get; set; }
-        public User User { get; set; }
+        public LocalUser LocalUser { get; set; }
 
         // Foreign keys
-        public int UserID { get; set; }
+        public int LocalUserID { get; set; }
         
     }
 }

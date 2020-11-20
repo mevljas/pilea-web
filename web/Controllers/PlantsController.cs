@@ -22,7 +22,7 @@ namespace web.Controllers
         // GET: Plants
         public async Task<IActionResult> Index()
         {
-            var pileaContext = _context.Plants.Include(p => p.Category).Include(p => p.User);
+            var pileaContext = _context.Plants.Include(p => p.Category).Include(p => p.LocalUser);
             return View(await pileaContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace web.Controllers
 
             var plant = await _context.Plants
                 .Include(p => p.Category)
-                .Include(p => p.User)
+                .Include(p => p.LocalUser)
                 .FirstOrDefaultAsync(m => m.PlantID == id);
             if (plant == null)
             {
@@ -50,7 +50,7 @@ namespace web.Controllers
         public IActionResult Create()
         {
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID");
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID");
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID");
             return View();
         }
 
@@ -59,7 +59,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWatered,UserID,CategoryID")] Plant plant)
+        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWatered,LocalUserID,CategoryID")] Plant plant)
         {
             if (ModelState.IsValid)
             {
@@ -68,7 +68,7 @@ namespace web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", plant.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", plant.LocalUserID);
             return View(plant);
         }
 
@@ -86,7 +86,7 @@ namespace web.Controllers
                 return NotFound();
             }
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", plant.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", plant.LocalUserID);
             return View(plant);
         }
 
@@ -95,7 +95,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWatered,UserID,CategoryID")] Plant plant)
+        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWatered,LocalUserID,CategoryID")] Plant plant)
         {
             if (id != plant.PlantID)
             {
@@ -123,7 +123,7 @@ namespace web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryID"] = new SelectList(_context.Types, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["UserID"] = new SelectList(_context.Users, "UserID", "UserID", plant.UserID);
+            ViewData["LocalUserID"] = new SelectList(_context.LocalUser, "LocalUserID", "LocalUserID", plant.LocalUserID);
             return View(plant);
         }
 
@@ -137,7 +137,7 @@ namespace web.Controllers
 
             var plant = await _context.Plants
                 .Include(p => p.Category)
-                .Include(p => p.User)
+                .Include(p => p.LocalUser)
                 .FirstOrDefaultAsync(m => m.PlantID == id);
             if (plant == null)
             {
