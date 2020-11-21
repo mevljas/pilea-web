@@ -9,6 +9,7 @@ using web.Data;
 using web.Models;
 using Microsoft.AspNetCore.Authorization;	
 using Microsoft.AspNetCore.Identity;
+using System.IO;
 
 namespace web.Controllers
 {
@@ -132,11 +133,15 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID,LocationID")] Plant plant)
         {
+
             // Get ApplicationUser object (plant owner)	
             var currentUser = await _usermanager.GetUserAsync(User);
             if (ModelState.IsValid)
             {
                 plant.User = currentUser;
+                Console.WriteLine("to je image "+Request.Form.Files[0]);
+                plant.image = UploadImage(Request);
+                
                 _context.Add(plant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -236,5 +241,32 @@ namespace web.Controllers
         {
             return _context.Plants.Any(e => e.PlantID == id);
         }
+
+
+
+        [HttpPost]
+        public byte[] UploadImage(Microsoft.AspNetCore.Http.HttpRequest request)
+        {
+            foreach(var file in request.Form.Files)
+            {
+                Plant img = new Plant();
+                var ImageTitle = file.FileName;
+
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                img.image = ms.ToArray();
+
+                ms.Close();
+                ms.Dispose();
+                Console.Write("IM WRIGINT IMAGE "+file);
+                ViewBag.Message = "Image(s) stored in database!";
+                return img.image;
+            }
+            return null;
+            
+            
+            //return View("Index");
+        }
+
     }
 }

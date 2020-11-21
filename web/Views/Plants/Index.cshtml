@@ -4,13 +4,13 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>My plants</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Add new plant</a>
 </p>
 
-<form asp-action="Index" method="get">
+  <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
             Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
@@ -18,8 +18,9 @@
             <a asp-action="Index">Back to Full List</a>
         </p>
     </div>
-</form>
-<table class="table">
+  </form>
+  
+  <!-- <table class="table">
     <thead>
         <tr>
             <th>
@@ -52,42 +53,27 @@
             <th></th>
         </tr>
     </thead>
-    <tbody>
+    <tbody> -->
+
+<div class="card-columns">
+
+
+
+
 @foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Note)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.image)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DaysBetweenWatering)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastWateredDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NextWateredDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryID)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationID)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PlantID">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PlantID">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PlantID">Delete</a>
-            </td>
-        </tr>
+    <div class="card">
+                <div class="card-img" style="background-image: url(data:image/jpg;base64,@Convert.ToBase64String(item.image));"></div>
+                <div class="card-body">
+                    <h5 class="card-title">@item.Name</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">@item.Note</h6>
+
+                    <p class="card-text">@item.Description</p>
+                    <br>
+                    <p class="card-text">Next watering @item.NextWateredDate.ToShortDateString()</p>
+                    <button type="button" class="btn">Water</button>
+
+                </div>
+    </div>
+
 }
-    </tbody>
-</table>
+</div>
