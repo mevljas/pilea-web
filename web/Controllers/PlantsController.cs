@@ -28,10 +28,60 @@ namespace web.Controllers
         }
 
         // GET: Plants
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder)
         {
-            var pileaContext = _context.Plants.Include(p => p.Category).Include(p => p.Location);
-            return View(await pileaContext.ToListAsync());
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DaysBetweenWateringParm"] = sortOrder == "DaysBetweenWatering" ? "DaysBetweenWatering_desc" : "DaysBetweenWatering";
+            ViewData["LastWateredDateParm"] = sortOrder == "LastWateredDate" ? "LastWateredDate_desc" : "LastWateredDate";
+            ViewData["NextWateredDateParm"] = sortOrder == "NextWateredDate" ? "NextWateredDate_desc" : "NextWateredDate";
+            ViewData["CategoryParm"] = sortOrder == "Category" ? "Category_desc" : "Category";
+            ViewData["LocationParm"] = sortOrder == "Location" ? "Location_desc" : "Location";
+            
+
+            var plants = from p in _context.Plants.Include(p => p.Category).Include(p => p.Location) select p;
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    plants = plants.OrderByDescending(p => p.Name);
+                    break;
+                case "DaysBetweenWatering":
+                    plants = plants.OrderBy(p => p.DaysBetweenWatering);
+                    break;
+                case "DaysBetweenWatering_desc":
+                    plants = plants.OrderByDescending(p => p.DaysBetweenWatering);
+                    break;
+                case "LastWateredDate":
+                    plants = plants.OrderBy(p => p.LastWateredDate);
+                    break;
+                case "LastWateredDate_desc":
+                    plants = plants.OrderByDescending(p => p.LastWateredDate);
+                    break;
+                case "NextWateredDateParm":
+                    plants = plants.OrderBy(p => p.NextWateredDate);
+                    break;
+                case "NextWateredDateParm_desc":
+                    plants = plants.OrderByDescending(p => p.NextWateredDate);
+                    break;
+                case "Category":
+                    plants = plants.OrderBy(p => p.Category);
+                    break;
+                case "Category_desc":
+                    plants = plants.OrderByDescending(p => p.Category);
+                    break;
+                case "Location":
+                    plants = plants.OrderBy(p => p.Location);
+                    break;
+                case "Location_desc":
+                    plants = plants.OrderByDescending(p => p.Location);
+                    break;
+                default:
+                    plants = plants.OrderBy(p => p.Name);
+                    break;
+            }
+            return View(await plants.AsNoTracking().ToListAsync());
+
+        
         }
 
         // GET: Plants/Details/5
