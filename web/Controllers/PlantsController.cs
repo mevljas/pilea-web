@@ -126,7 +126,7 @@ namespace web.Controllers
         public IActionResult Create()
         {
             var currentUserID = _usermanager.GetUserId(User);
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
+            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "PlantCategory");
             ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User.Id == currentUserID), "LocationID", "Name");
             return View();
         }
@@ -174,7 +174,7 @@ namespace web.Controllers
             {
                 return NotFound();
             }
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", plant.CategoryID);
+            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "PlantCategory", plant.CategoryID);
             ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User == currentUser), "LocationID", "Name", plant.LocationID);
             return View(plant);
         }
