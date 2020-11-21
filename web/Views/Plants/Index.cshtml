@@ -22,35 +22,39 @@
   
   <!-- <table class="table">
     <thead>
-        <tr>
-            <th>
-                 <a asp-action="Index" asp-route-sortOrder="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Name)</a>
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Note)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.image)
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["DaysBetweenWateringParm"]">@Html.DisplayNameFor(model => model.DaysBetweenWatering)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["LastWateredDateParm"]">@Html.DisplayNameFor(model => model.LastWateredDate)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["NextWateredDateParm"]">@Html.DisplayNameFor(model => model.NextWateredDate)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["CategoryParm"]">@Html.DisplayNameFor(model => model.Category)</a>
-            </th>
-            <th>
-                <a asp-action="Index" asp-route-sortOrder="@ViewData["LocationParm"]">@Html.DisplayNameFor(model => model.Location)</a>
-            </th>
-            <th></th>
+       <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.image)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DaysBetweenWatering)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastWateredDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NextWateredDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category.PlantCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Location.Name)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.PlantID">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.PlantID">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.PlantID">Delete</a>
+            </td>
         </tr>
     </thead>
     <tbody> -->

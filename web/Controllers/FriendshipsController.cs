@@ -31,7 +31,8 @@ namespace web.Controllers
         // GET: Friendships
         public async Task<IActionResult> Index()
         {
-            var pileaContext = _context.Friendships.Include(f => f.User).Include(f => f.UserFriend);
+            var currentUser = await _usermanager.GetUserAsync(User);
+            var pileaContext = _context.Friendships.Where(p => p.User == currentUser).Include(f => f.User).Include(f => f.UserFriend);
             return View(await pileaContext.ToListAsync());
         }
 
