@@ -7,21 +7,21 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;	
 using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
-    // Require login for everything
+    // Require login for everything	
     [Authorize]
     public class PlantsController : Controller
     {
         private readonly PileaContext _context;
 
-        // Object for fetching user info.
-        private readonly UserManager<ApplicationUser> _usermanager;
+        // Object for fetching user info.	
+        private readonly UserManager<User> _usermanager;
 
-        public PlantsController(PileaContext context, UserManager<ApplicationUser> userManager)
+        public PlantsController(PileaContext context, UserManager<User> userManager)
         {
             _context = context;
             _usermanager = userManager;
@@ -69,7 +69,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID,LocationID")] Plant plant)
         {
-            // Get ApplicationUser object (plant owner)
+            // Get ApplicationUser object (plant owner)	
             var currentUser = await _usermanager.GetUserAsync(User);
             if (ModelState.IsValid)
             {

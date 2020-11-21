@@ -22,23 +22,23 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class="col-sm-2">	
-            @Html.DisplayNameFor(model => model.Plants)	
-        </dt>	
-        <dd class="col-sm-10">	
-            <table class="table">	
-                <tr>	
-                    <th>Plant Name</th>	
-                </tr>	
-                @foreach (var item in Model.Plants)	
-                {	
-                    <tr>	
-                        <td>	
-                            @Html.DisplayFor(modelItem => item.Name)	
-                        </td>	
-                    </tr>	
-                }	
-            </table>	
+        <dt class="col-sm-2">		
+            @Html.DisplayNameFor(model => model.Plants)		
+        </dt>		
+        <dd class="col-sm-10">		
+            <table class="table">		
+                <tr>		
+                    <th>Plant Name</th>		
+                </tr>		
+                @foreach (var item in Model.Plants)		
+                {		
+                    <tr>		
+                        <td>		
+                            @Html.DisplayFor(modelItem => item.Name)		
+                        </td>		
+                    </tr>		
+                }		
+            </table>		
         </dd>
     </dl>
 </div>

@@ -34,7 +34,7 @@ namespace web
                 options => options.UseSqlServer(Configuration.GetConnectionString("PileaContext")));
 
 
-            services.AddIdentity<ApplicationUser, IdentityRole>(
+            services.AddIdentity<User, IdentityRole>(
                 options => options.Stores.MaxLengthForKeys = 128)
                 .AddEntityFrameworkStores<PileaContext>()
                 .AddDefaultUI()

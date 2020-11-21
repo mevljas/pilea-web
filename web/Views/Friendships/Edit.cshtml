@@ -1,4 +1,4 @@
-@model web.Models.Friend
+@model web.Models.Friendship
 
 @{
     ViewData["Title"] = "Edit";
@@ -6,13 +6,14 @@
 
 <h1>Edit</h1>
 
-<h4>Friend</h4>
+<h4>Friendship</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="FriendID" />
+            <input type="hidden" asp-for="UserId" />
+            <input type="hidden" asp-for="UserFriendId" />
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

@@ -12,7 +12,7 @@ namespace web.Models
         public string? Description { get; set; }
         public ICollection<Plant> Plants { get; set; }
 
-        public ApplicationUser User { get; set; }
+        public User User { get; set; }
 
 
 

@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;	
 using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
@@ -17,10 +17,10 @@ namespace web.Controllers
     {
         private readonly PileaContext _context;
 
-        // Object for fetching user info.
-        private readonly UserManager<ApplicationUser> _usermanager;
+        // Object for fetching user info.	
+        private readonly UserManager<User> _usermanager;
 
-        public LocationsController(PileaContext context, UserManager<ApplicationUser> userManager)
+        public LocationsController(PileaContext context, UserManager<User> userManager)
         {
             _context = context;
             _usermanager = userManager;
@@ -40,12 +40,10 @@ namespace web.Controllers
                 return NotFound();
             }
 
-
             var location = await _context.Locations
-                .Include(s => s.Plants)
+                .Include(s => s.Plants)	
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.LocationID == id);
-                
             if (location == null)
             {
                 return NotFound();
@@ -67,7 +65,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LocationID,Name,Description")] Location location)
         {
-            // Get ApplicationUser object (plant owner)
+            // Get ApplicationUser object (plant owner)	
             var currentUser = await _usermanager.GetUserAsync(User);
             if (ModelState.IsValid)
             {

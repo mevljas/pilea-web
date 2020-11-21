@@ -40,9 +40,7 @@ namespace web.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    FirstName = table.Column<string>(nullable: true),
-                    Lastname = table.Column<string>(nullable: true),
-                    City = table.Column<string>(nullable: true)
+                    nickname = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -169,18 +167,23 @@ namespace web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Friend",
+                name: "Friendship",
                 columns: table => new
                 {
-                    FriendID = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(nullable: true)
+                    UserId = table.Column<string>(nullable: false),
+                    UserFriendId = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Friend", x => x.FriendID);
+                    table.PrimaryKey("PK_Friendship", x => new { x.UserId, x.UserFriendId });
                     table.ForeignKey(
-                        name: "FK_Friend_AspNetUsers_UserId",
+                        name: "FK_Friendship_AspNetUsers_UserFriendId",
+                        column: x => x.UserFriendId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Friendship_AspNetUsers_UserId",
                         column: x => x.UserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
@@ -288,9 +291,9 @@ namespace web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Friend_UserId",
-                table: "Friend",
-                column: "UserId");
+                name: "IX_Friendship_UserFriendId",
+                table: "Friendship",
+                column: "UserFriendId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Location_UserId",
@@ -331,7 +334,7 @@ namespace web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Friend");
+                name: "Friendship");
 
             migrationBuilder.DropTable(
                 name: "Plant");

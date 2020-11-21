@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;	
 using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
@@ -36,10 +36,9 @@ namespace web.Controllers
             }
 
             var category = await _context.Categories
-                .Include(p => p.Plants)
+                .Include(p => p.Plants)	
                 .AsNoTracking()
-                .FirstOrDefaultAsync(c => c.CategoryID == id);
-
+                .FirstOrDefaultAsync(m => m.CategoryID == id);
             if (category == null)
             {
                 return NotFound();
@@ -49,7 +48,6 @@ namespace web.Controllers
         }
 
         // GET: Categories/Create
-
         [Authorize]
         public IActionResult Create()
         {
@@ -61,6 +59,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("CategoryID,PlantCategory")] Category category)
         {
             if (ModelState.IsValid)
