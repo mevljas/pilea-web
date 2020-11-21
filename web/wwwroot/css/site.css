@@ -1,5 +1,13 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+.btn{
+  background-color:#53787d ;
+  border: #53787d;
+}
+
+.btn:hover{
+  background-color:#6d989e ;
+}
 
 a.navbar-brand {
   white-space: normal;
@@ -7,9 +15,12 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+
+
 /* Provide sufficient contrast against white background */
 a {
-  color: #0366d6;
+  color: #101011;
+
 }
 
 .btn-primary {
@@ -17,21 +28,58 @@ a {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+@media (min-width: 576px){
+
+  
+.head{
+  background-color: #53787d;
+}
+
+a:hover{
+  color: #101011;
+}
+
+.light{
+  color: #EEE7DA;
+  font-weight: bold;
+}
+
+
+.center{
+  height: auto;
+  margin: 0 auto;
+  width: auto;
+}
+
+.nav-item{
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.nav-item {
+
+    padding: .5rem;
+
+}
+
+
 
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
+
+
 }
 
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-  font-size: 14px;
+  font-size: 16px;
 }
 @media (min-width: 768px) {
   html {
-    font-size: 16px;
+    font-size: 20px;
   }
 }
 
@@ -61,11 +109,73 @@ html {
 body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
+  /*background-color: #EEE7DA;*/
 }
+
 .footer {
   position: absolute;
   bottom: 0;
   width: 100%;
   white-space: nowrap;
   line-height: 60px; /* Vertically center the text there */
+}
+}
+
+
+/*/////////////////////////////////////////CARDS/////////////////////////////////////////////////*/
+
+.checked {
+  color: orange;
+}
+
+.fa-star {
+  cursor: pointer;
+}
+
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+.card-columns .card:hover .card-img {
+  opacity: 1;
+  -webkit-transform-style: preserve-3d;
+}
+
+.card-columns .card-body {
+  /*height: 100px;*/
+  font-family: 'Nunito', sans-serif;
+  background: #fbfafd;
+}
+
+.card-columns .card-img {
+  height: 330px;
+  vertical-align: bottom;
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+  opacity: .8;
+}
+
+.modal .card-img {
+  height: 500px;
+  vertical-align: bottom;
+  background-position: center; /* Center the image */
+  background-repeat: no-repeat; /* Do not repeat the image */
+  background-size: cover; /* Resize the background image to cover the entire container */
+}
+
+.card-columns .card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 10px 20px rgba(37,33,82,.12), 0 4px 8px rgba(37,33,82,.06);
+}
+
+.card-footer {
+  background: #fbfafd;
+}
+
+
+a.navbar-brand {
+  white-space: normal;
+  font-family: 'Yellowtail', cursive;
+  font-size: xx-large;
+  text-align: center;
+  word-break: break-all;
 }
