@@ -28,8 +28,16 @@
 
 @foreach (var item in Model) {
     <div class="card">
+        
+                @if(item.image !=null)
+                {
+                    <div class="card-img" style="background-image: url(data:image/jpg;base64,@Convert.ToBase64String(item.image));"></div>
+  
+                }else{
+                    <div class="card-img" style='background-image: url("plant.jpg")'></div>
 
-                <div class="card-img" style="background-image: url(data:image/jpg;base64,@Convert.ToBase64String(item.image));"></div>
+                }
+
                 <div class="card-body">
                     <button type="button" class="close" aria-label="Close">
                     <a asp-action="Delete" asp-route-id="@item.PlantID" style="text-decoration: none;">x</a>

@@ -145,7 +145,6 @@ namespace web.Controllers
             if (ModelState.IsValid)
             {
                 plant.User = currentUser;
-                Console.WriteLine("to je image "+Request.Form.Files[0]);
                 plant.image = UploadImage(Request);
                 
                 _context.Add(plant);
