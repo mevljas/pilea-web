@@ -9,6 +9,7 @@ using web.Data;
 using web.Models;
 using Microsoft.AspNetCore.Authorization;	
 using Microsoft.AspNetCore.Identity;
+using System.IO;
 
 namespace web.Controllers
 {
@@ -28,11 +29,77 @@ namespace web.Controllers
         }
 
         // GET: Plants
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+
+//             Get current user.
             var currentUser = await _usermanager.GetUserAsync(User);
-            var pileaContext = _context.Plants.Where(p => p.User == currentUser).Include(p => p.Category).Include(p => p.Location);
-            return View(await pileaContext.ToListAsync());
+            
+            // define sort parameters
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DaysBetweenWateringParm"] = sortOrder == "DaysBetweenWatering" ? "DaysBetweenWatering_desc" : "DaysBetweenWatering";
+            ViewData["LastWateredDateParm"] = sortOrder == "LastWateredDate" ? "LastWateredDate_desc" : "LastWateredDate";
+            ViewData["NextWateredDateParm"] = sortOrder == "NextWateredDate" ? "NextWateredDate_desc" : "NextWateredDate";
+            ViewData["CategoryParm"] = sortOrder == "Category" ? "Category_desc" : "Category";
+            ViewData["LocationParm"] = sortOrder == "Location" ? "Location_desc" : "Location";
+
+             // define search parameters
+            ViewData["CurrentFilter"] = searchString;
+
+
+            // Query
+            var plants = from p in _context.Plants.Where(p => p.User == currentUser).Include(p => p.Category).Include(p => p.Location) select p;
+
+
+            // search
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                plants = plants.Where(p => p.Name.Contains(searchString)
+                                        || p.Description.Contains(searchString)
+                                        || p.Note.Contains(searchString));
+            }
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    plants = plants.OrderByDescending(p => p.Name);
+                    break;
+                case "DaysBetweenWatering":
+                    plants = plants.OrderBy(p => p.DaysBetweenWatering);
+                    break;
+                case "DaysBetweenWatering_desc":
+                    plants = plants.OrderByDescending(p => p.DaysBetweenWatering);
+                    break;
+                case "LastWateredDate":
+                    plants = plants.OrderBy(p => p.LastWateredDate);
+                    break;
+                case "LastWateredDate_desc":
+                    plants = plants.OrderByDescending(p => p.LastWateredDate);
+                    break;
+                case "NextWateredDateParm":
+                    plants = plants.OrderBy(p => p.NextWateredDate);
+                    break;
+                case "NextWateredDateParm_desc":
+                    plants = plants.OrderByDescending(p => p.NextWateredDate);
+                    break;
+                case "Category":
+                    plants = plants.OrderBy(p => p.Category);
+                    break;
+                case "Category_desc":
+                    plants = plants.OrderByDescending(p => p.Category);
+                    break;
+                case "Location":
+                    plants = plants.OrderBy(p => p.Location);
+                    break;
+                case "Location_desc":
+                    plants = plants.OrderByDescending(p => p.Location);
+                    break;
+                default:
+                    plants = plants.OrderBy(p => p.Name);
+                    break;
+            }
+            return View(await plants.AsNoTracking().ToListAsync());
+
+        
         }
 
         // GET: Plants/Details/5
@@ -71,12 +138,16 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID,LocationID")] Plant plant)
         {
+
             // Get ApplicationUser object (plant owner)	
             var currentUser = await _usermanager.GetUserAsync(User);
             var pileaContext = _context.Plants.Where(p => p.User == currentUser).Include(p => p.Category).Include(p => p.Location);
             if (ModelState.IsValid)
             {
                 plant.User = currentUser;
+                Console.WriteLine("to je image "+Request.Form.Files[0]);
+                plant.image = UploadImage(Request);
+                
                 _context.Add(plant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -180,5 +251,32 @@ namespace web.Controllers
         {
             return _context.Plants.Any(e => e.PlantID == id);
         }
+
+
+
+        [HttpPost]
+        public byte[] UploadImage(Microsoft.AspNetCore.Http.HttpRequest request)
+        {
+            foreach(var file in request.Form.Files)
+            {
+                Plant img = new Plant();
+                var ImageTitle = file.FileName;
+
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                img.image = ms.ToArray();
+
+                ms.Close();
+                ms.Dispose();
+                Console.Write("IM WRIGINT IMAGE "+file);
+                ViewBag.Message = "Image(s) stored in database!";
+                return img.image;
+            }
+            return null;
+            
+            
+            //return View("Index");
+        }
+
     }
 }
