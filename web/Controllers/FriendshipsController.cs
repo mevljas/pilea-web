@@ -59,8 +59,9 @@ namespace web.Controllers
         // GET: Friendships/Create
         public IActionResult Create()
         {
+            var currentUserID = _usermanager.GetUserId(User);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["UserFriendId"] = new SelectList(_context.Users, "Id", "Id");
+            ViewData["UserFriendId"] = new SelectList(_context.Users.Where(l => l.Id != currentUserID), "Id", "Email");
             return View();
         }
 
