@@ -67,10 +67,10 @@
                 @Html.DisplayFor(modelItem => item.NextWateredDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.CategoryID)
+                @Html.DisplayFor(modelItem => item.Category.PlantCategory)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Location.LocationID)
+                @Html.DisplayFor(modelItem => item.Location.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.PlantID">Edit</a> |

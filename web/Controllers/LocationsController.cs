@@ -29,7 +29,8 @@ namespace web.Controllers
         // GET: Locations
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Locations.ToListAsync());
+            var currentUser = await _usermanager.GetUserAsync(User);
+            return View(await _context.Locations.Where(p => p.User == currentUser).ToListAsync());
         }
 
         // GET: Locations/Details/5

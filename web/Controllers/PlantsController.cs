@@ -30,7 +30,8 @@ namespace web.Controllers
         // GET: Plants
         public async Task<IActionResult> Index()
         {
-            var pileaContext = _context.Plants.Include(p => p.Category).Include(p => p.Location);
+            var currentUser = await _usermanager.GetUserAsync(User);
+            var pileaContext = _context.Plants.Where(p => p.User == currentUser).Include(p => p.Category).Include(p => p.Location);
             return View(await pileaContext.ToListAsync());
         }
 
@@ -57,8 +58,9 @@ namespace web.Controllers
         // GET: Plants/Create
         public IActionResult Create()
         {
+            var currentUserID = _usermanager.GetUserId(User);
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID");
-            ViewData["LocationID"] = new SelectList(_context.Locations, "LocationID", "LocationID");
+            ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User.Id == currentUserID), "LocationID", "Name");
             return View();
         }
 
@@ -71,6 +73,7 @@ namespace web.Controllers
         {
             // Get ApplicationUser object (plant owner)	
             var currentUser = await _usermanager.GetUserAsync(User);
+            var pileaContext = _context.Plants.Where(p => p.User == currentUser).Include(p => p.Category).Include(p => p.Location);
             if (ModelState.IsValid)
             {
                 plant.User = currentUser;
@@ -79,13 +82,17 @@ namespace web.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["LocationID"] = new SelectList(_context.Locations, "LocationID", "LocationID", plant.LocationID);
+            ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User == currentUser), "LocationID", "LocationID", plant.LocationID);
             return View(plant);
         }
+
+
 
         // GET: Plants/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
+             // Get ApplicationUser object (plant owner)	
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (id == null)
             {
                 return NotFound();
@@ -97,7 +104,7 @@ namespace web.Controllers
                 return NotFound();
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", plant.CategoryID);
-            ViewData["LocationID"] = new SelectList(_context.Locations, "LocationID", "LocationID", plant.LocationID);
+            ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User == currentUser), "LocationID", "Name", plant.LocationID);
             return View(plant);
         }
 
