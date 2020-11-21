@@ -28,18 +28,31 @@ namespace web.Controllers
         }
 
         // GET: Plants
-        public async Task<IActionResult> Index(string sortOrder)
+        public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
+            // define sort parameters
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DaysBetweenWateringParm"] = sortOrder == "DaysBetweenWatering" ? "DaysBetweenWatering_desc" : "DaysBetweenWatering";
             ViewData["LastWateredDateParm"] = sortOrder == "LastWateredDate" ? "LastWateredDate_desc" : "LastWateredDate";
             ViewData["NextWateredDateParm"] = sortOrder == "NextWateredDate" ? "NextWateredDate_desc" : "NextWateredDate";
             ViewData["CategoryParm"] = sortOrder == "Category" ? "Category_desc" : "Category";
             ViewData["LocationParm"] = sortOrder == "Location" ? "Location_desc" : "Location";
-            
 
+             // define search parameters
+            ViewData["CurrentFilter"] = searchString;
+
+
+            // Query
             var plants = from p in _context.Plants.Include(p => p.Category).Include(p => p.Location) select p;
 
+
+            // search
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                plants = plants.Where(p => p.Name.Contains(searchString)
+                                        || p.Description.Contains(searchString)
+                                        || p.Note.Contains(searchString));
+            }
             switch (sortOrder)
             {
                 case "name_desc":
