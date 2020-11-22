@@ -7,7 +7,7 @@
 <h1>Details</h1>
 
 <div>
-    <h4>Location</h4>
+
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -22,14 +22,11 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
-        <dt class="col-sm-2">		
-            @Html.DisplayNameFor(model => model.Plants)		
-        </dt>		
-        <dd class="col-sm-10">		
-            <table class="table">		
-                <tr>		
-                    <th>Plant Name</th>		
-                </tr>		
+        </br></br></br>
+
+
+            <h5>Plant in @Html.DisplayFor(model => model.Name)</h5>		
+            <table class="table">			
                 @foreach (var item in Model.Plants)		
                 {		
                     <tr>		
@@ -40,7 +37,7 @@
                 }		
             </table>		
         </dd>
-    </dl>
+
 </div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model.LocationID">Edit</a> |
