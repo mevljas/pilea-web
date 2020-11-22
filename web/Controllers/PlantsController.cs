@@ -145,7 +145,6 @@ namespace web.Controllers
             if (ModelState.IsValid)
             {
                 plant.User = currentUser;
-                Console.WriteLine("to je image "+Request.Form.Files[0]);
                 plant.image = UploadImage(Request);
                 
                 _context.Add(plant);
@@ -195,6 +194,7 @@ namespace web.Controllers
             {
                 try
                 {
+                    plant.image = UploadImage(Request);
                     _context.Update(plant);
                     await _context.SaveChangesAsync();
                 }
@@ -277,6 +277,9 @@ namespace web.Controllers
             
             //return View("Index");
         }
+
+
+
 
     }
 }

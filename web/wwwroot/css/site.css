@@ -106,11 +106,7 @@ html {
   min-height: 100%;
 }
 
-body {
-  /* Margin bottom by footer height */
-  margin-bottom: 60px;
-  /*background-color: #EEE7DA;*/
-}
+
 
 .footer {
   position: absolute;
@@ -179,3 +175,80 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
 }
+
+
+
+html, body {
+  margin: 0;
+  height: 100%;
+}
+
+.box {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 20%;
+  background-color: #ccc;
+  border-radius: 3px;
+  justify-content: center;
+  justify-content: space-between;
+  
+}
+
+.box{
+  position: absolute;
+  margin: auto;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  width: 80%;
+  height: 20%;
+  background-color: #53787d;
+  border-radius: 3px;
+  justify-content: center;
+}
+
+
+.content_box {
+  line-height: 50%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  white-space:nowrap;
+
+}
+
+
+
+
+
+@media (max-width: 980px) {
+    .title{ 
+        font-size: 45px; 
+      }
+}
+  
+@media (max-width: 780px) {
+  .title{ 
+      font-size: 30px; 
+    }
+}
+@media (max-width: 580px) {
+  .title{ 
+      font-size: 20px; 
+    }
+}
+
+
+
+
+
