@@ -5,6 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
+
 <h1>My plants</h1>
 
 <p>
@@ -48,7 +49,7 @@
 
                     <p class="card-text">@item.Description</p>
                     <br>
-                    <p class="card-text">Next watering @item.NextWateredDate.ToShortDateString()</p>
+                    <p class="card-text" >Next watering @item.NextWateredDate.ToShortDateString()</p>
                     <button type="button" class="btn">Water</button>
 
                     
@@ -64,3 +65,4 @@
 
 }
 </div>
+

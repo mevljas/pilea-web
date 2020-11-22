@@ -194,6 +194,7 @@ namespace web.Controllers
             {
                 try
                 {
+                    plant.image = UploadImage(Request);
                     _context.Update(plant);
                     await _context.SaveChangesAsync();
                 }
@@ -276,6 +277,9 @@ namespace web.Controllers
             
             //return View("Index");
         }
+
+
+
 
     }
 }
