@@ -227,7 +227,10 @@ html, body {
 
 }
 
-
+.bg{
+  background: url('../bg.png');
+  background-size: cover;
+}
 
 
 
