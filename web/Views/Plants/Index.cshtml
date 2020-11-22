@@ -8,9 +8,9 @@
 
 <h1>My plants</h1>
 
-<p>
-    <a asp-action="Create">Add new plant</a>
-</p>
+
+
+<br>
 
   <form asp-action="Index" method="get">
     <div class="form-actions no-color">
@@ -18,6 +18,8 @@
             Search: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
             <input type="submit" value="Search" class="btn btn-default" /> |
             <a asp-action="Index">Back to Full List</a>
+            <button class="add_field_button btn btn-success btn-md float-right" ><a asp-action="Create" style="text-decoration: none;">Add new plant</a></button>
+
         </p>
     </div>
   </form>

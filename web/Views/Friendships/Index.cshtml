@@ -4,16 +4,17 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
-
+<h1>My friends</h1>
+<br>
 <p>
-    <a asp-action="Create">Create New</a>
+    <button class="add_field_button btn btn-success btn-md" ><a asp-action="Create" style="text-decoration: none;">Add new friend</a></button>
+
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserFriend)
+               <a>My friends</a>
             </th>
             <th></th>
         </tr>
