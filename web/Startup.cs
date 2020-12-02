@@ -31,7 +31,7 @@ namespace web
 
             // Register PileaContext as a service
             services.AddDbContext<PileaContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("AzureContext")));
+                options => options.UseSqlServer(Configuration.GetConnectionString("PileaContext")));
 
 
             services.AddIdentity<User, IdentityRole>(
