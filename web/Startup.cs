@@ -39,6 +39,8 @@ namespace web
                 .AddEntityFrameworkStores<PileaContext>()
                 .AddDefaultUI()
                 .AddDefaultTokenProviders();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -70,6 +72,17 @@ namespace web
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 endpoints.MapRazorPages();  //For login, register and others page templates.
             });
+
+        
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+            // This one didn't work
+            // c.SwaggerEndpoint("/api/v1/swagger.json", "My API V1");
+
+            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Versioned Api v1");
+            });
+
         }
     }
 }
