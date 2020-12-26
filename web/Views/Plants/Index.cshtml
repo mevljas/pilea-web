@@ -55,7 +55,7 @@
                 <br>
                 <p class="card-text">Next watering @item.NextWateredDate.ToShortDateString()</p>
                 @* Form for watering flowers *@
-                @using (Html.BeginForm("Update", "Plants", new { id = item.PlantID }))
+                @using (Html.BeginForm("WaterPlant", "Plants", new { id = item.PlantID }))
                 {
                     @Html.AntiForgeryToken()
                     

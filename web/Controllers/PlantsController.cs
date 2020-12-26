@@ -281,7 +281,7 @@ namespace web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Update(int ID)
+        public async Task<IActionResult> WaterPlant(int ID)
         {
             // Get the plant
             var plant = await _context.Plants.FindAsync(ID);
