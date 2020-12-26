@@ -30,9 +30,12 @@ namespace web
             services.AddControllersWithViews();
 
             // Register PileaContext as a service
-            services.AddDbContext<PileaContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("AzureContext")));
 
+            //Commented out AzureContext for offline development.
+            /*services.AddDbContext<PileaContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("AzureContext")));*/
+            services.AddDbContext<PileaContext>(
+                options => options.UseSqlServer(Configuration.GetConnectionString("PileaContext")));
 
             services.AddIdentity<User, IdentityRole>(
                 options => options.Stores.MaxLengthForKeys = 128)
@@ -73,14 +76,14 @@ namespace web
                 endpoints.MapRazorPages();  //For login, register and others page templates.
             });
 
-        
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-            // This one didn't work
-            // c.SwaggerEndpoint("/api/v1/swagger.json", "My API V1");
+                // This one didn't work
+                // c.SwaggerEndpoint("/api/v1/swagger.json", "My API V1");
 
-            c.SwaggerEndpoint("/swagger/v1/swagger.json", "Versioned Api v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Versioned Api v1");
             });
 
         }

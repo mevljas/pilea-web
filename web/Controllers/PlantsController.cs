@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
-using Microsoft.AspNetCore.Authorization;	
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using System.IO;
 
@@ -32,9 +32,9 @@ namespace web.Controllers
         public async Task<IActionResult> Index(string sortOrder, string searchString)
         {
 
-//             Get current user.
+            //             Get current user.
             var currentUser = await _usermanager.GetUserAsync(User);
-            
+
             // define sort parameters
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DaysBetweenWateringParm"] = sortOrder == "DaysBetweenWatering" ? "DaysBetweenWatering_desc" : "DaysBetweenWatering";
@@ -43,7 +43,7 @@ namespace web.Controllers
             ViewData["CategoryParm"] = sortOrder == "Category" ? "Category_desc" : "Category";
             ViewData["LocationParm"] = sortOrder == "Location" ? "Location_desc" : "Location";
 
-             // define search parameters
+            // define search parameters
             ViewData["CurrentFilter"] = searchString;
 
 
@@ -99,7 +99,7 @@ namespace web.Controllers
             }
             return View(await plants.AsNoTracking().ToListAsync());
 
-        
+
         }
 
         // GET: Plants/Details/5
@@ -146,7 +146,7 @@ namespace web.Controllers
             {
                 plant.User = currentUser;
                 plant.image = UploadImage(Request);
-                
+
                 _context.Add(plant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -161,7 +161,7 @@ namespace web.Controllers
         // GET: Plants/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-             // Get ApplicationUser object (plant owner)	
+            // Get ApplicationUser object (plant owner)	
             var currentUser = await _usermanager.GetUserAsync(User);
             if (id == null)
             {
@@ -257,7 +257,7 @@ namespace web.Controllers
         [HttpPost]
         public byte[] UploadImage(Microsoft.AspNetCore.Http.HttpRequest request)
         {
-            foreach(var file in request.Form.Files)
+            foreach (var file in request.Form.Files)
             {
                 Plant img = new Plant();
                 var ImageTitle = file.FileName;
@@ -268,16 +268,34 @@ namespace web.Controllers
 
                 ms.Close();
                 ms.Dispose();
-                Console.Write("IM WRIGINT IMAGE "+file);
+                Console.Write("IM WRIGINT IMAGE " + file);
                 ViewBag.Message = "Image(s) stored in database!";
                 return img.image;
             }
             return null;
-            
-            
+
+
             //return View("Index");
         }
 
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> WaterPlant(int ID)
+        {
+            // Get the plant
+            var plant = await _context.Plants.FindAsync(ID);
+
+            // Update properties
+            var LastWateredDate = DateTime.Now;
+            plant.LastWateredDate = LastWateredDate;
+            plant.NextWateredDate = LastWateredDate.AddDays(plant.DaysBetweenWatering);
+
+            // Save and redirect
+            _context.Update(plant);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
 
 
 
