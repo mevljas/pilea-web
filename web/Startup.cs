@@ -31,11 +31,12 @@ namespace web
 
             // Register PileaContext as a service
 
-            //Commented out AzureContext for offline development.
-            /*services.AddDbContext<PileaContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("AzureContext")));*/
+            //Use AzureContext for deployment.
             services.AddDbContext<PileaContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("PileaContext")));
+                options => options.UseSqlServer(Configuration.GetConnectionString("AzureContext")));
+            //Use PileaContext for offline development.
+            // services.AddDbContext<PileaContext>(
+            //     options => options.UseSqlServer(Configuration.GetConnectionString("PileaContext")));
 
             services.AddIdentity<User, IdentityRole>(
                 options => options.Stores.MaxLengthForKeys = 128)
