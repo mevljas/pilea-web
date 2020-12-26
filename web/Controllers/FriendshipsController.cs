@@ -142,9 +142,9 @@ namespace web.Controllers
         }
 
         // GET: Friendships/Delete/5
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string UserId, string UserFriendId)
         {
-            if (id == null)
+            if (UserId == null || UserFriendId == null)
             {
                 return NotFound();
             }
@@ -152,7 +152,7 @@ namespace web.Controllers
             var friendship = await _context.Friendships
                 .Include(f => f.User)
                 .Include(f => f.UserFriend)
-                .FirstOrDefaultAsync(m => m.UserId == id);
+                .FirstOrDefaultAsync(m => m.UserId == UserId && m.UserFriendId == UserFriendId);
             if (friendship == null)
             {
                 return NotFound();
@@ -164,9 +164,9 @@ namespace web.Controllers
         // POST: Friendships/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(string id)
+        public async Task<IActionResult> DeleteConfirmed(string UserId, string UserFriendId)
         {
-            var friendship = await _context.Friendships.FindAsync(id);
+            var friendship = await _context.Friendships.FindAsync(UserId, UserFriendId);
             _context.Friendships.Remove(friendship);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
