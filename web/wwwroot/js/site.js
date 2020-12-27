@@ -2,3 +2,7 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+
+// Limit last watered date input range. Set max date to today.
+LastWateredDateDatePicker.max = new Date().toISOString().split("T")[0];

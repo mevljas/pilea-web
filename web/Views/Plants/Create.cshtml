@@ -44,7 +44,8 @@
         <div class ="row">
             <div class="form-group col-md-5">
                 <label asp-for="LastWateredDate" class="control-label"></label>
-                <input asp-for="LastWateredDate" class="form-control" />
+                <input type="date" id="LastWateredDateDatePicker" asp-for="LastWateredDate" class="form-control" />
+                @* <input asp-for="LastWateredDate" class="form-control" /> *@
                 <span asp-validation-for="LastWateredDate" class="text-danger"></span>
             </div>
             <div class="form-group col-md-5">
