@@ -5,4 +5,6 @@
 
 
 // Limit last watered date input range. Set max date to today.
-LastWateredDateDatePicker.max = new Date().toISOString().split("T")[0];
+
+
+
