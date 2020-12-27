@@ -126,7 +126,7 @@ namespace web.Controllers
         public IActionResult Create()
         {
             var currentUserID = _usermanager.GetUserId(User);
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "PlantCategory");
+            ViewData["CategoryID"] = new SelectList(_context.Categories.Where(c => c.User.Id == currentUserID), "CategoryID", "PlantCategory");
             ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User.Id == currentUserID), "LocationID", "Name");
             return View();
         }

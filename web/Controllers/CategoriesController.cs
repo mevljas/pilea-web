@@ -12,19 +12,25 @@ using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly PileaContext _context;
 
-        public CategoriesController(PileaContext context)
+        // Object for fetching user info.	
+        private readonly UserManager<User> _usermanager;
+
+        public CategoriesController(PileaContext context, UserManager<User> userManager)
         {
             _context = context;
+            _usermanager = userManager;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            var currentUser = await _usermanager.GetUserAsync(User);
+            return View(await _context.Categories.Where(p => p.User == currentUser).ToListAsync());
         }
 
         // GET: Categories/Details/5
@@ -62,8 +68,11 @@ namespace web.Controllers
         [Authorize]
         public async Task<IActionResult> Create([Bind("CategoryID,PlantCategory")] Category category)
         {
+            // Get ApplicationUser object (plant owner)	
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (ModelState.IsValid)
             {
+                category.User = currentUser;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
