@@ -50,10 +50,15 @@
             @* <input asp-for="LastWateredDate" class="form-control" /> *@
             <span asp-validation-for="LastWateredDate" class="text-danger"></span>
         </div>
-        <div class="form-group col-md-5">
+        @* <div class="form-group col-md-5">
             <label asp-for="NextWateredDate" class="control-label"></label>
             <input asp-for="NextWateredDate" class="form-control" />
             <span asp-validation-for="NextWateredDate" class="text-danger"></span>
+        </div> *@
+        <div class="form-group col-md-5">
+            <label class="control-label">Image</label>
+            <input asp-for="image" type="file" class="form-control" id="file1" name="file1" multiple="multiple" />
+            <span asp-validation-for="image" class="text-danger"></span>
         </div>
     </div>
 
@@ -71,25 +76,22 @@
         </div>
     </div>
 
-    <div class ="row">
-        <div class="form-group col-md-5">
-            <label class="control-label">Image</label>
-            <input asp-for="image" type="file" class="form-control" id="file1" name="file1" multiple="multiple" />
-            <span asp-validation-for="image" class="text-danger"></span>
-        </div>
-    </div>
+    @* <div class ="row">
+        
+    </div> *@
 
-    <div class="form-group">
-        <input type="submit" value="Save" class="btn" />
-    </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn" />
+            </div>
            
         </form>
+        <div>
+            <a asp-action="Index">Back to List</a>
+        </div>
     </div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 <script>
     LastWateredDatePickerEdit.max = new Date().toISOString().split("T")[0];
