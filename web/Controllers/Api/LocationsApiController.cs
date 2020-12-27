@@ -7,11 +7,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
+using web.Filters;
 
 namespace web.Controllers_Api
 {
     [Route("api/v1/location")]
     [ApiController]
+    [ApiKeyAuth]
     public class LocationsApiController : ControllerBase
     {
         private readonly PileaContext _context;
