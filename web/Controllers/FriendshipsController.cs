@@ -9,9 +9,6 @@ using web.Data;
 using web.Models;
 using Microsoft.AspNetCore.Authorization;	
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;	
-using Microsoft.AspNetCore.Identity;
-
 namespace web.Controllers
 {
     [Authorize]

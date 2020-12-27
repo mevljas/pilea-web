@@ -12,10 +12,12 @@ namespace web.Models
         public string Name { get; set; }
         // Show this text when there is no entry.
         [DisplayFormat(NullDisplayText = "No description")]
+#nullable enable
         public string? Description { get; set; }
         [DisplayFormat(NullDisplayText = "No note")]
         public string? Note { get; set; }
         public byte[]? image { get; set; }
+#nullable disable
         [Display(Name = "Days between watering")]
         [Range(typeof(int), "1", "100")]
         public int DaysBetweenWatering { get; set; }
@@ -32,12 +34,17 @@ namespace web.Models
         public DateTime NextWateredDate { get; set; }
 
         [DisplayFormat(NullDisplayText = "No category")]
-        public Category? Category { get; set; }
 
+#nullable enable
+        public Category? Category { get; set; }
+#nullable disable
         public int CategoryID { get; set; }
 
         [DisplayFormat(NullDisplayText = "No location")]
+
+#nullable enable
         public Location? Location { get; set; }
+#nullable disable
         public int LocationID { get; set; }
         
 
