@@ -36,6 +36,8 @@ namespace web.Controllers
         // GET: Locations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUser = await _usermanager.GetUserAsync(User);
+
             if (id == null)
             {
                 return NotFound();
@@ -43,6 +45,7 @@ namespace web.Controllers
 
             var location = await _context.Locations
                 .Include(s => s.Plants)	
+                .Where(s => s.User == currentUser)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.LocationID == id);
             if (location == null)
@@ -89,8 +92,11 @@ namespace web.Controllers
                 return NotFound();
             }
 
+
             var location = await _context.Locations.FindAsync(id);
-            if (location == null)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            
+            if (location == null || location.User != currentUser)
             {
                 return NotFound();
             }
@@ -105,7 +111,8 @@ namespace web.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("LocationID,Name,Description")] Location location)
         {
-            if (id != location.LocationID)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (id != location.LocationID || location.User != currentUser)
             {
                 return NotFound();
             }
@@ -142,8 +149,10 @@ namespace web.Controllers
                 return NotFound();
             }
 
+            var currentUser = await _usermanager.GetUserAsync(User);
+
             var location = await _context.Locations
-                .FirstOrDefaultAsync(m => m.LocationID == id);
+                .FirstOrDefaultAsync(m => m.LocationID == id && m.User == currentUser);
             if (location == null)
             {
                 return NotFound();
@@ -159,6 +168,11 @@ namespace web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var location = await _context.Locations.FindAsync(id);
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (location.User != currentUser)
+            {
+                return NotFound();
+            }
             _context.Locations.Remove(location);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

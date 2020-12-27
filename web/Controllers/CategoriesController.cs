@@ -36,6 +36,7 @@ namespace web.Controllers
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (id == null)
             {
                 return NotFound();
@@ -43,6 +44,7 @@ namespace web.Controllers
 
             var category = await _context.Categories
                 .Include(p => p.Plants)	
+                .Where(p => p.User == currentUser)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CategoryID == id);
             if (category == null)
@@ -90,7 +92,8 @@ namespace web.Controllers
             }
 
             var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (category == null || category.User != currentUser)
             {
                 return NotFound();
             }
@@ -105,7 +108,8 @@ namespace web.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryID,PlantCategory")] Category category)
         {
-            if (id != category.CategoryID)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (id != category.CategoryID || category.User != currentUser)
             {
                 return NotFound();
             }
@@ -142,8 +146,10 @@ namespace web.Controllers
                 return NotFound();
             }
 
+            var currentUser = await _usermanager.GetUserAsync(User);
+
             var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryID == id);
+                .FirstOrDefaultAsync(m => m.CategoryID == id && m.User == currentUser);
             if (category == null)
             {
                 return NotFound();
@@ -159,6 +165,11 @@ namespace web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (category.User != currentUser)
+            {
+                return NotFound();
+            }
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
