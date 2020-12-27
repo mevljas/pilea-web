@@ -13,5 +13,7 @@ namespace web.Models
         [Display(Name  = "Category name")]
         public String PlantCategory { get; set; }
         public ICollection<Plant> Plants { get; set; }
+
+        public User User { get; set; }
     }
 }

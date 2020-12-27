@@ -12,24 +12,31 @@ using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
+    [Authorize]
     public class CategoriesController : Controller
     {
         private readonly PileaContext _context;
 
-        public CategoriesController(PileaContext context)
+        // Object for fetching user info.	
+        private readonly UserManager<User> _usermanager;
+
+        public CategoriesController(PileaContext context, UserManager<User> userManager)
         {
             _context = context;
+            _usermanager = userManager;
         }
 
         // GET: Categories
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Categories.ToListAsync());
+            var currentUser = await _usermanager.GetUserAsync(User);
+            return View(await _context.Categories.Where(p => p.User == currentUser).ToListAsync());
         }
 
         // GET: Categories/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (id == null)
             {
                 return NotFound();
@@ -37,6 +44,7 @@ namespace web.Controllers
 
             var category = await _context.Categories
                 .Include(p => p.Plants)	
+                .Where(p => p.User == currentUser)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(m => m.CategoryID == id);
             if (category == null)
@@ -62,8 +70,11 @@ namespace web.Controllers
         [Authorize]
         public async Task<IActionResult> Create([Bind("CategoryID,PlantCategory")] Category category)
         {
+            // Get ApplicationUser object (plant owner)	
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (ModelState.IsValid)
             {
+                category.User = currentUser;
                 _context.Add(category);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -81,7 +92,8 @@ namespace web.Controllers
             }
 
             var category = await _context.Categories.FindAsync(id);
-            if (category == null)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (category == null || category.User != currentUser)
             {
                 return NotFound();
             }
@@ -96,7 +108,8 @@ namespace web.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryID,PlantCategory")] Category category)
         {
-            if (id != category.CategoryID)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (id != category.CategoryID || category.User != currentUser)
             {
                 return NotFound();
             }
@@ -133,8 +146,10 @@ namespace web.Controllers
                 return NotFound();
             }
 
+            var currentUser = await _usermanager.GetUserAsync(User);
+
             var category = await _context.Categories
-                .FirstOrDefaultAsync(m => m.CategoryID == id);
+                .FirstOrDefaultAsync(m => m.CategoryID == id && m.User == currentUser);
             if (category == null)
             {
                 return NotFound();
@@ -150,6 +165,11 @@ namespace web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (category.User != currentUser)
+            {
+                return NotFound();
+            }
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

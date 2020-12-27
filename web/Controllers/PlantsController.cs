@@ -105,6 +105,7 @@ namespace web.Controllers
         // GET: Plants/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var currentUser = await _usermanager.GetUserAsync(User);
             if (id == null)
             {
                 return NotFound();
@@ -113,6 +114,7 @@ namespace web.Controllers
             var plant = await _context.Plants
                 .Include(p => p.Category)
                 .Include(p => p.Location)
+                .Where(p => p.User == currentUser)
                 .FirstOrDefaultAsync(m => m.PlantID == id);
             if (plant == null)
             {
@@ -126,7 +128,7 @@ namespace web.Controllers
         public IActionResult Create()
         {
             var currentUserID = _usermanager.GetUserId(User);
-            ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "PlantCategory");
+            ViewData["CategoryID"] = new SelectList(_context.Categories.Where(c => c.User.Id == currentUserID), "CategoryID", "PlantCategory");
             ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User.Id == currentUserID), "LocationID", "Name");
             return View();
         }
@@ -136,7 +138,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID,LocationID")] Plant plant)
+        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,CategoryID,LocationID")] Plant plant)
         {
 
             // Get ApplicationUser object (plant owner)	
@@ -147,9 +149,13 @@ namespace web.Controllers
                 plant.User = currentUser;
                 plant.image = UploadImage(Request);
 
-                _context.Add(plant);
+                plant.NextWateredDate = plant.LastWateredDate.AddDays(plant.DaysBetweenWatering);
+
+                // Save and redirect
+                _context.Update(plant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+                
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", plant.CategoryID);
             ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User == currentUser), "LocationID", "LocationID", plant.LocationID);
@@ -169,7 +175,7 @@ namespace web.Controllers
             }
 
             var plant = await _context.Plants.FindAsync(id);
-            if (plant == null)
+            if (plant == null || plant.User != currentUser)
             {
                 return NotFound();
             }
@@ -183,9 +189,10 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID,LocationID")] Plant plant)
+        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,CategoryID,LocationID")] Plant plant)
         {
-            if (id != plant.PlantID)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (id != plant.PlantID || plant.User != currentUser)
             {
                 return NotFound();
             }
@@ -195,6 +202,7 @@ namespace web.Controllers
                 try
                 {
                     plant.image = UploadImage(Request);
+                    plant.NextWateredDate = plant.LastWateredDate.AddDays(plant.DaysBetweenWatering);
                     _context.Update(plant);
                     await _context.SaveChangesAsync();
                 }
@@ -224,10 +232,12 @@ namespace web.Controllers
                 return NotFound();
             }
 
+            var currentUser = await _usermanager.GetUserAsync(User);
+
             var plant = await _context.Plants
                 .Include(p => p.Category)
                 .Include(p => p.Location)
-                .FirstOrDefaultAsync(m => m.PlantID == id);
+                .FirstOrDefaultAsync(m => m.PlantID == id && m.User == currentUser);
             if (plant == null)
             {
                 return NotFound();
@@ -242,6 +252,11 @@ namespace web.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var plant = await _context.Plants.FindAsync(id);
+            var currentUser = await _usermanager.GetUserAsync(User);
+             if (plant.User != currentUser)
+            {
+                return NotFound();
+            }
             _context.Plants.Remove(plant);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

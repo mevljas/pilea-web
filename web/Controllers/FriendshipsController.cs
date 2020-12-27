@@ -9,9 +9,6 @@ using web.Data;
 using web.Models;
 using Microsoft.AspNetCore.Authorization;	
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Authorization;	
-using Microsoft.AspNetCore.Identity;
-
 namespace web.Controllers
 {
     [Authorize]
@@ -39,6 +36,9 @@ namespace web.Controllers
         // GET: Friendships/Details/5
         public async Task<IActionResult> Details(string id)
         {
+
+            var currentUser = await _usermanager.GetUserAsync(User);
+
             if (id == null)
             {
                 return NotFound();
@@ -47,6 +47,7 @@ namespace web.Controllers
             var friendship = await _context.Friendships
                 .Include(f => f.User)
                 .Include(f => f.UserFriend)
+                .Where(f => f.User == currentUser)
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (friendship == null)
             {
@@ -61,7 +62,13 @@ namespace web.Controllers
         {
             var currentUserID = _usermanager.GetUserId(User);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["UserFriendId"] = new SelectList(_context.Users.Where(l => l.Id != currentUserID), "Id", "Email");
+            ViewData["UserFriendId"] = new SelectList(_context.Users
+                    .Where(l => l.Id != currentUserID)
+                    .Where(l => !_context.Friendships
+                        .Where(a => a.UserId == currentUserID  && a.UserFriendId == l.Id )
+                        .Select(a => a.UserFriendId)
+                        .Contains(l.Id))
+            , "Id", "Email");
             return View();
         }
 
@@ -95,7 +102,9 @@ namespace web.Controllers
             }
 
             var friendship = await _context.Friendships.FindAsync(id);
-            if (friendship == null)
+            var currentUser = await _usermanager.GetUserAsync(User);
+
+            if (friendship == null || friendship.User != currentUser)
             {
                 return NotFound();
             }
@@ -111,7 +120,8 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("UserId,UserFriendId")] Friendship friendship)
         {
-            if (id != friendship.UserId)
+            var currentUser = await _usermanager.GetUserAsync(User);
+            if (id != friendship.UserId || friendship.User != currentUser)
             {
                 return NotFound();
             }
@@ -149,10 +159,12 @@ namespace web.Controllers
                 return NotFound();
             }
 
+            var currentUser = await _usermanager.GetUserAsync(User);
+
             var friendship = await _context.Friendships
                 .Include(f => f.User)
                 .Include(f => f.UserFriend)
-                .FirstOrDefaultAsync(m => m.UserId == UserId && m.UserFriendId == UserFriendId);
+                .FirstOrDefaultAsync(m => m.UserId == UserId && m.UserFriendId == UserFriendId && m.User == currentUser);
             if (friendship == null)
             {
                 return NotFound();
@@ -166,7 +178,12 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string UserId, string UserFriendId)
         {
+            var currentUser = await _usermanager.GetUserAsync(User);
             var friendship = await _context.Friendships.FindAsync(UserId, UserFriendId);
+            if (friendship.User != currentUser)
+            {
+                return NotFound();
+            }
             _context.Friendships.Remove(friendship);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
