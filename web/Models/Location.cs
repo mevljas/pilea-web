@@ -9,7 +9,9 @@ namespace web.Models
 
         public string Name { get; set; }
 
+#nullable enable
         public string? Description { get; set; }
+#nullable disable
         public ICollection<Plant> Plants { get; set; }
 
         public User User { get; set; }

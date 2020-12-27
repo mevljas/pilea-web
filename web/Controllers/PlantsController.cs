@@ -153,10 +153,7 @@ namespace web.Controllers
                 _context.Update(plant);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-
-                _context.Add(plant);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                
             }
             ViewData["CategoryID"] = new SelectList(_context.Categories, "CategoryID", "CategoryID", plant.CategoryID);
             ViewData["LocationID"] = new SelectList(_context.Locations.Where(l => l.User == currentUser), "LocationID", "LocationID", plant.LocationID);

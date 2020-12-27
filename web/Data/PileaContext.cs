@@ -51,6 +51,6 @@ namespace web.Data
 
 
         }
-        public DbSet<User> Users { get; set; }
+        public override  DbSet<User> Users { get; set; }
     }
 }
