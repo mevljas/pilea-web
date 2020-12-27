@@ -62,7 +62,13 @@ namespace web.Controllers
         {
             var currentUserID = _usermanager.GetUserId(User);
             ViewData["UserId"] = new SelectList(_context.Users, "Id", "Id");
-            ViewData["UserFriendId"] = new SelectList(_context.Users.Where(l => l.Id != currentUserID), "Id", "Email");
+            ViewData["UserFriendId"] = new SelectList(_context.Users
+                    .Where(l => l.Id != currentUserID)
+                    .Where(l => !_context.Friendships
+                        .Where(a => a.UserId == currentUserID  && a.UserFriendId == l.Id )
+                        .Select(a => a.UserFriendId)
+                        .Contains(l.Id))
+            , "Id", "Email");
             return View();
         }
 
