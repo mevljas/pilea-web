@@ -17,6 +17,7 @@ namespace web.Models
         public string? Note { get; set; }
         public byte[]? image { get; set; }
         [Display(Name = "Days between watering")]
+        [Range(typeof(int), "1", "100")]
         public int DaysBetweenWatering { get; set; }
 
         [DataType(DataType.Date)]

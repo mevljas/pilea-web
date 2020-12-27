@@ -35,7 +35,7 @@
             </div>
             <div class="form-group col-md-5">
                 <label asp-for="DaysBetweenWatering" class="control-label"></label>
-                <input asp-for="DaysBetweenWatering" class="form-control" />
+                <input asp-for="DaysBetweenWatering" class="form-control" min="1"/>
                 <span asp-validation-for="DaysBetweenWatering" class="text-danger"></span>
             </div>
         </div>
