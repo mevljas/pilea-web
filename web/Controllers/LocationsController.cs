@@ -95,7 +95,7 @@ namespace web.Controllers
 
             var location = await _context.Locations.FindAsync(id);
             var currentUser = await _usermanager.GetUserAsync(User);
-            if (location.User != currentUser)
+            
             if (location == null || location.User != currentUser)
             {
                 return NotFound();
