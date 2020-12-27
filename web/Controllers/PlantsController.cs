@@ -136,7 +136,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID,LocationID")] Plant plant)
+        public async Task<IActionResult> Create([Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,CategoryID,LocationID")] Plant plant)
         {
 
             // Get ApplicationUser object (plant owner)	
@@ -146,6 +146,13 @@ namespace web.Controllers
             {
                 plant.User = currentUser;
                 plant.image = UploadImage(Request);
+
+                plant.NextWateredDate = plant.LastWateredDate.AddDays(plant.DaysBetweenWatering);
+
+                // Save and redirect
+                _context.Update(plant);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
 
                 _context.Add(plant);
                 await _context.SaveChangesAsync();
@@ -183,7 +190,7 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,NextWateredDate,CategoryID,LocationID")] Plant plant)
+        public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,CategoryID,LocationID")] Plant plant)
         {
             if (id != plant.PlantID)
             {
@@ -195,6 +202,7 @@ namespace web.Controllers
                 try
                 {
                     plant.image = UploadImage(Request);
+                    plant.NextWateredDate = plant.LastWateredDate.AddDays(plant.DaysBetweenWatering);
                     _context.Update(plant);
                     await _context.SaveChangesAsync();
                 }
