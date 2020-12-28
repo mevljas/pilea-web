@@ -114,7 +114,7 @@ namespace web
                 // This one didn't work
                 // c.SwaggerEndpoint("/api/v1/swagger.json", "My API V1");
 
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Versioned Api v1");
+                c.SwaggerEndpoint("/swagger/swagger.json", "Versioned Api v1");
             });
 
         }

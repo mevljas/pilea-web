@@ -21,13 +21,11 @@ namespace web.Controllers_Api
     public class AuthenticateController : ControllerBase  
     {  
         private readonly UserManager<User> userManager;  
-        private readonly RoleManager<IdentityRole> roleManager;  
         private readonly IConfiguration _configuration;  
   
-        public AuthenticateController(UserManager<User> userManager, RoleManager<IdentityRole> roleManager, IConfiguration configuration)  
+        public AuthenticateController(UserManager<User> userManager, IConfiguration configuration)  
         {  
-            this.userManager = userManager;  
-            this.roleManager = roleManager;  
+            this.userManager = userManager;   
             _configuration = configuration;  
         }  
   
@@ -38,7 +36,6 @@ namespace web.Controllers_Api
             var user = await userManager.FindByNameAsync(model.Email);  
             if (user != null && await userManager.CheckPasswordAsync(user, model.Password))  
             {  
-                var userRoles = await userManager.GetRolesAsync(user);  
   
                 var authClaims = new List<Claim>  
                 {  
@@ -46,10 +43,6 @@ namespace web.Controllers_Api
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  
                 };  
   
-                foreach (var userRole in userRoles)  
-                {  
-                    authClaims.Add(new Claim(ClaimTypes.Role, userRole));  
-                }  
   
                 var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));  
   
