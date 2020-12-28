@@ -14,7 +14,7 @@ using System.IO;
 namespace web.Controllers
 {
     // Require login for everything	
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application" )]
     public class PlantsController : Controller
     {
         private readonly PileaContext _context;

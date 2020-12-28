@@ -43,14 +43,7 @@ namespace web
             services.AddDbContext<PileaContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("PileaContext")));
 
-            // For Identity  
-            services.AddIdentity<User, IdentityRole>(
-                options => options.Stores.MaxLengthForKeys = 128)
-                .AddEntityFrameworkStores<PileaContext>()
-                .AddDefaultUI()
-                .AddDefaultTokenProviders();
-
-            services.AddSwaggerGen();
+            
 
 
             // Adding Authentication  
@@ -74,7 +67,19 @@ namespace web
                     ValidIssuer = Configuration["JWT:ValidIssuer"],  
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
                 };  
-            });  
+            }); 
+
+             // For Identity  
+            services.AddIdentity<User, IdentityRole>(
+                options => options.Stores.MaxLengthForKeys = 128)
+                .AddEntityFrameworkStores<PileaContext>()
+                .AddDefaultUI()
+                .AddDefaultTokenProviders(); 
+
+            services.AddSwaggerGen();
+
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

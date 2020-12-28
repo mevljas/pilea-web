@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers_Api
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     [Route("api/Category")]
     [ApiController]
     [ApiKeyAuth]

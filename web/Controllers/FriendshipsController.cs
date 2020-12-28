@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 namespace web.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application" )]
     public class FriendshipsController : Controller
     {
         private readonly PileaContext _context;

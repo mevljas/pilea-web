@@ -15,7 +15,7 @@ namespace web.Controllers_Api
     [Route("api/location")]
     [ApiController]
     [ApiKeyAuth]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class LocationsApiController : ControllerBase
     {
         private readonly PileaContext _context;

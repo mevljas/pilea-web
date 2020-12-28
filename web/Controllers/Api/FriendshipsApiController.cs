@@ -15,7 +15,7 @@ namespace web.Controllers_Api
     [Route("api/Friendship")]
     [ApiController]
     [ApiKeyAuth]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class FriendshipsApiController : ControllerBase
     {
         private readonly PileaContext _context;
