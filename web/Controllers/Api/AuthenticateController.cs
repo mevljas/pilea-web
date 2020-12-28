@@ -10,11 +10,14 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;  
 using System.Text;  
 using System.Threading.Tasks;  
+using Microsoft.AspNetCore.Authorization;
+using web.Filters;
   
 namespace web.Controllers_Api
 {  
     [Route("api/[controller]")]  
     [ApiController]  
+    [ApiKeyAuth]
     public class AuthenticateController : ControllerBase  
     {  
         private readonly UserManager<User> userManager;  
@@ -39,7 +42,7 @@ namespace web.Controllers_Api
   
                 var authClaims = new List<Claim>  
                 {  
-                    new Claim(ClaimTypes.Name, user.UserName),  
+                    new Claim(ClaimTypes.Name, user.UserName),
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),  
                 };  
   
@@ -61,7 +64,8 @@ namespace web.Controllers_Api
                 return Ok(new  
                 {  
                     token = new JwtSecurityTokenHandler().WriteToken(token),  
-                    expiration = token.ValidTo  
+                    expiration = token.ValidTo,
+                    UserID = user.Id
                 });  
             }  
             return Unauthorized();  

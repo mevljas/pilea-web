@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using web.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers_Api
 {
+    [Authorize]
     [Route("api/Category")]
     [ApiController]
     [ApiKeyAuth]

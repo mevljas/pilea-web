@@ -8,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using web.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers_Api
 {
     [Route("api/location")]
     [ApiController]
     [ApiKeyAuth]
+    [Authorize]
     public class LocationsApiController : ControllerBase
     {
         private readonly PileaContext _context;
