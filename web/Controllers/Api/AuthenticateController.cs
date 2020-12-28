@@ -11,9 +11,9 @@ using System.Security.Claims;
 using System.Text;  
 using System.Threading.Tasks;  
   
-namespace web.Controllers
+namespace web.Controllers_Api
 {  
-    [Route("api/v1/[controller]")]  
+    [Route("api/[controller]")]  
     [ApiController]  
     public class AuthenticateController : ControllerBase  
     {  

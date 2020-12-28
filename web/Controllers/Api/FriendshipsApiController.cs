@@ -11,7 +11,7 @@ using web.Filters;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/Friendship")]
+    [Route("api/Friendship")]
     [ApiController]
     [ApiKeyAuth]
     public class FriendshipsApiController : ControllerBase

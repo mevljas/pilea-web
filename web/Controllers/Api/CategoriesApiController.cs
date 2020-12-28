@@ -11,10 +11,9 @@ using web.Filters;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/Category")]
+    [Route("api/Category")]
     [ApiController]
     [ApiKeyAuth]
-    [Authorize]
     public class CategoriesApiController : ControllerBase
     {
         private readonly PileaContext _context;

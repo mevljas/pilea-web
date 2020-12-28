@@ -11,7 +11,7 @@ using web.Filters;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/location")]
+    [Route("api/location")]
     [ApiController]
     [ApiKeyAuth]
     public class LocationsApiController : ControllerBase

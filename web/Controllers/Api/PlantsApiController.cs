@@ -11,7 +11,7 @@ using web.Filters;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/Plant")]
+    [Route("api/Plant")]
     [ApiController]
     [ApiKeyAuth]
     public class PlantsApiController : ControllerBase
