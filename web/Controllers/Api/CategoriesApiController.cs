@@ -14,6 +14,7 @@ namespace web.Controllers_Api
     [Route("api/v1/Category")]
     [ApiController]
     [ApiKeyAuth]
+    [Authorize]
     public class CategoriesApiController : ControllerBase
     {
         private readonly PileaContext _context;
