@@ -27,10 +27,10 @@ namespace web.Controllers_Api
 
         // GET: api/FriendshipsApi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Friendship>>> GetFriendships([FromQuery(Name = "userId")] string userId, [FromQuery(Name = "userFriendId")] string userFriendId)
+        public async Task<ActionResult<IEnumerable<Friendship>>> GetFriendships([FromQuery(Name = "userId")] string userId)
         {
             // return await _context.Friendships.ToListAsync();
-            return await _context.Friendships.Where(p => p.User.Id == userId && p.UserFriend.Id == userFriendId).ToListAsync();
+            return await _context.Friendships.Where(p => p.User.Id == userId).ToListAsync();
         }
 
         // GET: api/FriendshipsApi/5
