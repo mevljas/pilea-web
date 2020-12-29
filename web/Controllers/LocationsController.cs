@@ -107,8 +107,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("LocationID,Name,Description")] Location location)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-            if (id != location.LocationID || location.User != currentUser)
+            if (id != location.LocationID)
             {
                 return NotFound();
             }

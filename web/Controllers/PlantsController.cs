@@ -191,8 +191,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,CategoryID,LocationID")] Plant plant)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-            if (id != plant.PlantID || plant.User != currentUser)
+            if (id != plant.PlantID)
             {
                 return NotFound();
             }

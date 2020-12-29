@@ -104,8 +104,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryID,PlantCategory")] Category category)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-            if (id != category.CategoryID || category.User != currentUser)
+            if (id != category.CategoryID )
             {
                 return NotFound();
             }

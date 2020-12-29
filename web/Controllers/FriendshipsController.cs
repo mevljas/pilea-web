@@ -120,8 +120,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, [Bind("UserId,UserFriendId")] Friendship friendship)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-            if (id != friendship.UserId || friendship.User != currentUser)
+            if (id != friendship.UserId )
             {
                 return NotFound();
             }
