@@ -14,7 +14,7 @@ using System.IO;
 namespace web.Controllers
 {
     // Require login for everything	
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application" )]
     public class PlantsController : Controller
     {
         private readonly PileaContext _context;
@@ -191,8 +191,7 @@ namespace web.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("PlantID,Name,Description,Note,image,DaysBetweenWatering,LastWateredDate,CategoryID,LocationID")] Plant plant)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-            if (id != plant.PlantID || plant.User != currentUser)
+            if (id != plant.PlantID)
             {
                 return NotFound();
             }

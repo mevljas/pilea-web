@@ -8,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using web.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/location")]
+    [Route("api/location")]
     [ApiController]
     [ApiKeyAuth]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class LocationsApiController : ControllerBase
     {
         private readonly PileaContext _context;
@@ -25,9 +27,10 @@ namespace web.Controllers_Api
 
         // GET: api/LocationsApi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
+        public async Task<ActionResult<IEnumerable<Location>>> GetLocations([FromQuery(Name = "userId")] string userId)
         {
-            return await _context.Locations.ToListAsync();
+            // return await _context.Locations.ToListAsync();
+            return await _context.Locations.Where(p => p.User.Id == userId).ToListAsync();
         }
 
         // GET: api/LocationsApi/5
@@ -80,8 +83,10 @@ namespace web.Controllers_Api
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Location>> PostLocation(Location location)
+        public async Task<ActionResult<Location>> PostLocation(Location location, [FromQuery(Name = "userId")] string userId)
         {
+            var user = await _context.Users.FindAsync(userId);
+            location.User = user;
             _context.Locations.Add(location);
             await _context.SaveChangesAsync();
 

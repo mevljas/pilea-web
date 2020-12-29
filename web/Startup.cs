@@ -12,6 +12,9 @@ using web.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using web.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;   
+using Microsoft.IdentityModel.Tokens;  
+using System.Text; 
 
 namespace web
 {
@@ -27,8 +30,10 @@ namespace web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddControllers();  
             services.AddControllersWithViews();
 
+            // For Entity Framework  
             // Register PileaContext as a service
 
             //Use AzureContext for deployment.
@@ -38,13 +43,43 @@ namespace web
             // services.AddDbContext<PileaContext>(
             //     options => options.UseSqlServer(Configuration.GetConnectionString("PileaContext")));
 
+            
+
+
+            // Adding Authentication  
+            services.AddAuthentication(options =>  
+            {  
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;  
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;  
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;  
+            })  
+  
+            // Adding Jwt Bearer  
+            .AddJwtBearer(options =>  
+            {  
+                options.SaveToken = true;  
+                options.RequireHttpsMetadata = false;  
+                options.TokenValidationParameters = new TokenValidationParameters()  
+                {  
+                    ValidateIssuer = true,  
+                    ValidateAudience = true,  
+                    ValidAudience = Configuration["JWT:ValidAudience"],  
+                    ValidIssuer = Configuration["JWT:ValidIssuer"],  
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWT:Secret"]))  
+                };  
+            }); 
+
+             // For Identity  
             services.AddIdentity<User, IdentityRole>(
                 options => options.Stores.MaxLengthForKeys = 128)
                 .AddEntityFrameworkStores<PileaContext>()
                 .AddDefaultUI()
-                .AddDefaultTokenProviders();
+                .AddDefaultTokenProviders(); 
 
             services.AddSwaggerGen();
+
+
+           
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

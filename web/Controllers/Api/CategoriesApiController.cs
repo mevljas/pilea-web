@@ -8,10 +8,12 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using web.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/Category")]
+    [Authorize(AuthenticationSchemes = "Bearer")]
+    [Route("api/Category")]
     [ApiController]
     [ApiKeyAuth]
     public class CategoriesApiController : ControllerBase
@@ -25,9 +27,10 @@ namespace web.Controllers_Api
 
         // GET: api/CategoriesApi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
+        public async Task<ActionResult<IEnumerable<Category>>> GetCategories([FromQuery(Name = "userId")] string userId)
         {
-            return await _context.Categories.ToListAsync();
+            // return await _context.Categories.ToListAsync();
+            return await _context.Categories.Where(p => p.User.Id == userId).ToListAsync();
         }
 
         // GET: api/CategoriesApi/5
@@ -80,8 +83,10 @@ namespace web.Controllers_Api
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Category>> PostCategory(Category category)
+        public async Task<ActionResult<Category>> PostCategory(Category category, [FromQuery(Name = "userId")] string userId)
         {
+            var user = await _context.Users.FindAsync(userId);
+            category.User = user;
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
