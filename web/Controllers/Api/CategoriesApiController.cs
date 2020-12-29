@@ -85,9 +85,9 @@ namespace web.Controllers_Api
         [HttpPost]
         public async Task<ActionResult<Category>> PostCategory(Category category, [FromQuery(Name = "userId")] string userId)
         {
-            _context.Categories.Add(category);
             var user = await _context.Users.FindAsync(userId);
             category.User = user;
+            _context.Categories.Add(category);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetCategory", new { id = category.CategoryID }, category);

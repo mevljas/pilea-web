@@ -84,13 +84,23 @@ namespace web.Controllers_Api
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Plant>> PostPlant(Plant plant, [FromQuery(Name = "userId")] string userId)
+        public async Task<ActionResult<Plant>> PostPlant(Plant plant, [FromQuery(Name = "userId")] string userId, [FromQuery(Name = "categoryId")] int categoryId, [FromQuery(Name = "locationId")] int locationId)
         {
-            _context.Plants.Add(plant);
             var user = await _context.Users.FindAsync(userId);
+            var category = await _context.Categories.FindAsync(categoryId);
+            var location = await _context.Locations.FindAsync(locationId);
             plant.User = user;
+            plant.Category = category;
+            plant.Location = location;
+            _context.Plants.Add(plant);
             await _context.SaveChangesAsync();
 
+            
+            // Prevent looping dependencies
+            category.Plants = null;
+            location.Plants = null;
+            plant.Category = category;
+            plant.Location = location;
             return CreatedAtAction("GetPlant", new { id = plant.PlantID }, plant);
         }
 
