@@ -8,12 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using web.Filters;
+using Microsoft.AspNetCore.Authorization;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/Friendship")]
+    [Route("api/Friendship")]
     [ApiController]
     [ApiKeyAuth]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class FriendshipsApiController : ControllerBase
     {
         private readonly PileaContext _context;
@@ -25,9 +27,10 @@ namespace web.Controllers_Api
 
         // GET: api/FriendshipsApi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Friendship>>> GetFriendships()
+        public async Task<ActionResult<IEnumerable<Friendship>>> GetFriendships([FromQuery(Name = "userId")] string userId)
         {
-            return await _context.Friendships.ToListAsync();
+            // return await _context.Friendships.ToListAsync();
+            return await _context.Friendships.Where(p => p.User.Id == userId).ToListAsync();
         }
 
         // GET: api/FriendshipsApi/5
@@ -80,8 +83,12 @@ namespace web.Controllers_Api
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Friendship>> PostFriendship(Friendship friendship)
+        public async Task<ActionResult<Friendship>> PostFriendship(Friendship friendship, [FromQuery(Name = "userId")] string userId, [FromQuery(Name = "userFriendId")] string userFriendId)
         {
+            var user = await _context.Users.FindAsync(userId);
+            var friend = await _context.Users.FindAsync(userFriendId);
+            friendship.User = user;
+            friendship.UserFriend = friend;
             _context.Friendships.Add(friendship);
             try
             {
@@ -99,14 +106,19 @@ namespace web.Controllers_Api
                 }
             }
 
+            // Prevent looping dependencies
+            friendship.User = null;
+            friendship.UserFriend = null;
+
             return CreatedAtAction("GetFriendship", new { id = friendship.UserId }, friendship);
         }
 
         // DELETE: api/FriendshipsApi/5
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<Friendship>> DeleteFriendship(string id)
+        [HttpDelete("{userId}/{userFriendId}")]
+        public async Task<ActionResult<Friendship>> DeleteFriendship(string userId, string userFriendId)
         {
-            var friendship = await _context.Friendships.FindAsync(id);
+            // var friendship = await _context.Friendships.FindAsync(id);
+            var friendship = await _context.Friendships.FindAsync(userId, userFriendId);
             if (friendship == null)
             {
                 return NotFound();

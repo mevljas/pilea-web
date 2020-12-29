@@ -8,12 +8,15 @@ using Microsoft.EntityFrameworkCore;
 using web.Data;
 using web.Models;
 using web.Filters;
+using Microsoft.AspNetCore.Authorization;
+using web;
 
 namespace web.Controllers_Api
 {
-    [Route("api/v1/Plant")]
+    [Route("api/Plant")]
     [ApiController]
     [ApiKeyAuth]
+    [Authorize(AuthenticationSchemes = "Bearer")]
     public class PlantsApiController : ControllerBase
     {
         private readonly PileaContext _context;
@@ -25,9 +28,10 @@ namespace web.Controllers_Api
 
         // GET: api/PlantsApi
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Plant>>> GetPlants()
+        public async Task<ActionResult<IEnumerable<Plant>>> GetPlants([FromQuery(Name = "userId")] string userId)
         {
-            return await _context.Plants.ToListAsync();
+            // return await _context.Plants.ToListAsync();
+            return await _context.Plants.Where(p => p.User.Id == userId).ToListAsync();
         }
 
         // GET: api/PlantsApi/5
@@ -80,11 +84,23 @@ namespace web.Controllers_Api
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<Plant>> PostPlant(Plant plant)
+        public async Task<ActionResult<Plant>> PostPlant(Plant plant, [FromQuery(Name = "userId")] string userId, [FromQuery(Name = "categoryId")] int categoryId, [FromQuery(Name = "locationId")] int locationId)
         {
+            var user = await _context.Users.FindAsync(userId);
+            var category = await _context.Categories.FindAsync(categoryId);
+            var location = await _context.Locations.FindAsync(locationId);
+            plant.User = user;
+            plant.Category = category;
+            plant.Location = location;
             _context.Plants.Add(plant);
             await _context.SaveChangesAsync();
 
+            
+            // Prevent looping dependencies
+            category.Plants = null;
+            location.Plants = null;
+            plant.Category = category;
+            plant.Location = location;
             return CreatedAtAction("GetPlant", new { id = plant.PlantID }, plant);
         }
 

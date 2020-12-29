@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application" )]
     public class LocationsController : Controller
     {
         private readonly PileaContext _context;
@@ -57,7 +57,6 @@ namespace web.Controllers
         }
 
         // GET: Locations/Create
-        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -68,7 +67,6 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Create([Bind("LocationID,Name,Description")] Location location)
         {
             // Get ApplicationUser object (plant owner)	
@@ -84,7 +82,6 @@ namespace web.Controllers
         }
 
         // GET: Locations/Edit/5
-        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -108,11 +105,9 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("LocationID,Name,Description")] Location location)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-            if (id != location.LocationID || location.User != currentUser)
+            if (id != location.LocationID)
             {
                 return NotFound();
             }
@@ -141,7 +136,6 @@ namespace web.Controllers
         }
 
         // GET: Locations/Delete/5
-        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -164,7 +158,6 @@ namespace web.Controllers
         // POST: Locations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var location = await _context.Locations.FindAsync(id);

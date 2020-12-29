@@ -12,7 +12,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace web.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = "Identity.Application" )]
     public class CategoriesController : Controller
     {
         private readonly PileaContext _context;
@@ -56,7 +56,6 @@ namespace web.Controllers
         }
 
         // GET: Categories/Create
-        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -67,7 +66,6 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Create([Bind("CategoryID,PlantCategory")] Category category)
         {
             // Get ApplicationUser object (plant owner)	
@@ -83,7 +81,6 @@ namespace web.Controllers
         }
 
         // GET: Categories/Edit/5
-        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -105,11 +102,9 @@ namespace web.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("CategoryID,PlantCategory")] Category category)
         {
-            var currentUser = await _usermanager.GetUserAsync(User);
-            if (id != category.CategoryID || category.User != currentUser)
+            if (id != category.CategoryID )
             {
                 return NotFound();
             }
@@ -138,7 +133,6 @@ namespace web.Controllers
         }
 
         // GET: Categories/Delete/5
-        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -161,7 +155,6 @@ namespace web.Controllers
         // POST: Categories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var category = await _context.Categories.FindAsync(id);
