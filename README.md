@@ -11,9 +11,9 @@ Url: https://pilea-web-dev.azurewebsites.net/
 ![image 1](screenshots/image1.png)
 ![image 2](screenshots/image2.png)
 <p float="left">
-  <img src="screenshots/image3.png" alt="image3" width="100" />
-  <img src="screenshots/image4.png" alt="image4" width="100" /> 
-  <img src="screenshots/image5.png" alt="image5" width="100" />
+  <img src="screenshots/image3.png" alt="image3" width="500" />
+  <img src="screenshots/image4.png" alt="image4" width="500" /> 
+  <img src="screenshots/image5.png" alt="image5" width="500" />
 </p>
 
 ## Summary
