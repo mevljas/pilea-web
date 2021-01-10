@@ -10,9 +10,11 @@ Url: https://pilea-web-dev.azurewebsites.net/
 ## Screenshots
 ![image 1](screenshots/image1.png)
 ![image 2](screenshots/image2.png)
-![image 3](screenshots/image3.png)
-![image 4](screenshots/image4.png)
-![image 5](screenshots/image5.png)
+<p float="left">
+  <img src="screenshots/image3.png" alt="image3" width="100" />
+  <img src="screenshots/image4.png" alt="image4" width="100" /> 
+  <img src="screenshots/image5.png" alt="image5" width="100" />
+</p>
 
 ## Summary
 
@@ -24,5 +26,5 @@ Sebastjan has mostly worked on backend and API implementation while Beti has wor
 
 
 ## Database scheme
-![database diagram](screenshots/database.png)
+![database diagram](screenshots/database.png)  
 Besides user data we also store plants, locations, categories and friendships.
