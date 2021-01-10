@@ -22,3 +22,7 @@ We've decided to create Pilea, a web application that will help us care for our 
 ## Distribution of tasks
 Sebastjan has mostly worked on backend and API implementation while Beti has worked on frontend.
 
+
+## Database scheme
+![database diagram](screenshots/database.png)
+Besides user data we also store plants, locations, categories and friendships.
