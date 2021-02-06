@@ -2,7 +2,7 @@
 
 Project name: Pilea
 
-Authors: Sebastjan Mevlja(63180203) and Beti Piščanec(63180230).
+Authors: Sebastjan Mevlja and Beti Piščanec.
 
 Url: https://pilea-web-dev.azurewebsites.net/
 
